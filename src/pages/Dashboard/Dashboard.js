@@ -1,5 +1,6 @@
+import Content from '../../components/Content';
 function DashBoard() {
-  return <div>Dashboard</div>;
+  return <Content>DashBoard</Content>;
 }
 
 export default DashBoard;

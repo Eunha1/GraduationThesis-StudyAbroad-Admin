@@ -8,8 +8,9 @@ module.exports = {
         fontFamily : {
           Fredericka: ['Fredericka the Great','serif'],
           GreatVibes: ['Great Vibes', 'cursive'],
-          Almendra: ['Almendra', 'serif']
-  
+          Almendra: ['Almendra', 'serif'],
+          Roboto: ['Roboto', 'sans-serif'],
+          Inter: ["Inter", 'sans-serif']
         },
       },
     },

@@ -7,15 +7,15 @@ function App() {
     <BrowserRouter>
       <Routes>
         {ROUTER.map((router) => {
-          let BasisLayout = Layout;
+          let BasicLayout = Layout;
           if (router.layout === null) {
-            BasisLayout = Fragment;
+            BasicLayout = Fragment;
           }
           return (
             <Route
               key={router.key}
               path={router.path}
-              element={<BasisLayout>{router.element}</BasisLayout>}
+              element={<BasicLayout>{router.element}</BasicLayout>}
             />
           );
         })}
