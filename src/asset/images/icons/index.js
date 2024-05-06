@@ -268,13 +268,130 @@ export const ViewIcon = ({
   >
     <path
       d="M11.9998 20.27C15.5298 20.27 18.8198 18.19 21.1098 14.59C22.0098 13.18 22.0098 10.81 21.1098 9.39997C18.8198 5.79997 15.5298 3.71997 11.9998 3.71997C8.46984 3.71997 5.17984 5.79997 2.88984 9.39997C1.98984 10.81 1.98984 13.18 2.88984 14.59C5.17984 18.19 8.46984 20.27 11.9998 20.27Z"
-      stroke="#292D32"
+      stroke="#A1A1A1"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M15.58 11.9999C15.58 13.9799 13.98 15.5799 12 15.5799C10.02 15.5799 8.42004 13.9799 8.42004 11.9999C8.42004 10.0199 10.02 8.41992 12 8.41992C13.98 8.41992 15.58 10.0199 15.58 11.9999Z"
+      stroke="#A1A1A1"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const LogoutIcon = ({
+  width = '1.6rem',
+  height = '1.6rem',
+  className,
+}) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    width={width}
+    height={height}
+  >
+    <path
+      d="M8.90002 7.55999C9.21002 3.95999 11.06 2.48999 15.11 2.48999H15.24C19.71 2.48999 21.5 4.27999 21.5 8.74999V15.27C21.5 19.74 19.71 21.53 15.24 21.53H15.11C11.09 21.53 9.24002 20.08 8.91002 16.54"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M2 12H14.88"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12.65 8.6499L16 11.9999L12.65 15.3499"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const ImageGallery = ({
+  width = '1.6rem',
+  height = '1.6rem',
+  className,
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    width={width}
+    height={height}
+    version="1.1"
+    viewBox="0 0 24 24"
+  >
+    <script xmlns="" />
+    <circle fill="#5FE881" cx="88.9" cy="88.9" r="88.9" />
+    <path
+      fill="#FFFFFF"
+      d="M64.7,139.3H131c6.5,0,11.7-5.2,11.7-11.7V78.4c-0.1-6.4-5.4-11.7-11.8-11.7h-6.1v-6.1  c0-6.5-5.2-11.7-11.7-11.7H46.9c-6.5,0-11.7,5.2-11.7,11.7v49.2c0,6.5,5.2,11.7,11.7,11.7H53v6.1C53,134.1,58.3,139.3,64.7,139.3z   M130.9,69.7c4.8,0,8.7,3.9,8.7,8.7v49.2c0,4.8-3.9,8.7-8.7,8.7H64.6c-4.8,0-8.7-3.9-8.7-8.7V78.4c0-4.8,3.9-8.7,8.7-8.7H130.9z   M46.9,118.5c-4.8,0-8.7-3.9-8.7-8.7V60.6c0-4.8,3.9-8.7,8.7-8.7h66.3c4.8,0,8.7,3.9,8.7,8.7v6.1H64.6C58.2,66.7,53,72,53,78.4v40.1  H46.9z"
+    />
+    <path
+      fill="#FFFFFF"
+      d="M120.7,108.3c-1.2-2-4.1-2.1-5.4-0.1l-1.5,2.4c-0.5,0.7-1.4,0.7-1.9,0.1l-9-11.6c-1.2-1.5-3.5-1.7-4.8-0.2  l-4.6,5c-0.6,0.6-1.5,0.5-1.9-0.2l-7.3-13.4c-1.3-2.4-4.8-2.1-5.8,0.5L68,119.7c-0.7,2.1,0.8,4.2,2.9,4.2h53.4c2.5,0,4-2.7,2.7-4.8  L120.7,108.3z"
+    />
+    <g>
+      <circle fill="#FFFFFF" cx="115.2" cy="88.8" r="5.9" />
+    </g>
+    <script xmlns="" />
+  </svg>
+);
+export const DownloadImage = ({
+  width = '1.6rem',
+  height = '1.6rem',
+  className,
+}) => (
+  <svg
+    className={className}
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M9 10C10.1046 10 11 9.10457 11 8C11 6.89543 10.1046 6 9 6C7.89543 6 7 6.89543 7 8C7 9.10457 7.89543 10 9 10Z"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M13 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V10"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M18 2V8L20 6"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M18 8L16 6"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M2.66992 18.9501L7.59992 15.6401C8.38992 15.1101 9.52992 15.1701 10.2399 15.7801L10.5699 16.0701C11.3499 16.7401 12.6099 16.7401 13.3899 16.0701L17.5499 12.5001C18.3299 11.8301 19.5899 11.8301 20.3699 12.5001L21.9999 13.9001"
       stroke="#292D32"
       strokeWidth="1.5"
       strokeLinecap="round"

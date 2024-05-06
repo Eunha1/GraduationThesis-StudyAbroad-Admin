@@ -1,0 +1,3 @@
+export const ADMIN = 'ADMIN';
+export const EDU_COUNSELLOR = 'EDU_COUNSELLOR';
+export const ADMISSION_OFFICER = 'ADMISSION_OFFICER';

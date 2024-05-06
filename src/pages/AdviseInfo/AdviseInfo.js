@@ -1,13 +1,13 @@
-import { ViewIcon } from '../../asset/images/icons';
-import BaseTable from '../../components/BaseTable';
 import Breadcrumb from '../../components/Breadcrumb';
 import Content from '../../components/Content';
+import BaseTable from '../../components/BaseTable';
+import { ViewIcon } from '../../asset/images/icons';
 import { useNavigate } from 'react-router-dom';
 import { getRequest } from '../../services/Api';
 import { useEffect, useState } from 'react';
-function OfferLetter() {
+function AdviseInfo() {
   const [items, setItem] = useState();
-  const title = 'Hồ sơ thư mời';
+  const title = 'Thông tin tư vấn';
   const listBreadcrumb = [
     {
       src: '/',
@@ -15,8 +15,8 @@ function OfferLetter() {
     },
     {
       isCurrentPage: true,
-      src: '/offer-letter',
-      title: 'Hồ sơ thư mời',
+      src: '/advise-info',
+      title: 'Thông tin tư vấn',
     },
   ];
   const headers = [
@@ -25,42 +25,54 @@ function OfferLetter() {
       title: 'STT',
     },
     {
-      key: 'customer_name',
+      key: 'name',
       title: 'Tên khách hàng',
     },
     {
-      key: 'customer_phone',
+      key: 'phone',
       title: 'Số điện thoại',
     },
     {
-      key: 'customer_email',
+      key: 'email',
       title: 'Email',
     },
     {
-      key: 'customer_address',
+      key: 'address',
       title: 'Địa chỉ',
     },
     {
-      key: 'status',
-      title: 'Trạng thái',
+      key: 'level',
+      title: 'Trình độ quan tâm',
     },
     {
-      key: 'action',
-      title: 'Action',
+      key: 'destination',
+      title: 'Địa điểm quan tâm',
     },
+    {
+      key: 'question',
+      title: 'Câu hỏi',
+    },
+    {
+      key: 'status',
+      title: 'Status',
+    },
+    // {
+    //   key: 'action',
+    //   title: 'action',
+    // },
   ];
   useEffect(() => {
-    getListOfferLetter();
+    getListInfo();
   }, []);
-  const getListOfferLetter = async () => {
-    const data = await getRequest('/api/file/offer-letter-file');
+  const getListInfo = async () => {
+    const data = await getRequest('/api/customer/advise-info');
     setItem(data.data);
   };
   const navigate = useNavigate();
   const handleView = (id) => {
-    navigate(`/offer-letter/${id}`);
+    navigate(`/advise-info/${id}`);
   };
-  const action = [
+  const actions = [
     {
       key: 'view-detail',
       component: <ViewIcon />,
@@ -71,10 +83,10 @@ function OfferLetter() {
     <div>
       <Breadcrumb title={title} listBreadcrumb={listBreadcrumb} />
       <Content>
-        <BaseTable headers={headers} items={items} actions={action}></BaseTable>
+        <BaseTable headers={headers} items={items} actions={actions} />
       </Content>
     </div>
   );
 }
 
-export default OfferLetter;
+export default AdviseInfo;

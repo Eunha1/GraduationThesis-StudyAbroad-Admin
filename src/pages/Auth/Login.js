@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
@@ -9,8 +9,10 @@ import IconButton from '@mui/material/IconButton';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { postRequest } from '../../services/Api';
+import { toast } from 'react-toastify';
 function Login() {
   const [eye, setEye] = useState(false);
+  const navigate = useNavigate();
   // validation schema of yup
   const validationSchema = yup.object({
     email: yup
@@ -30,25 +32,30 @@ function Login() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       const data = await postRequest('/api/auth/login', values);
-      const access_token = data.token.accessToken;
-      localStorage.setItem('access_token', access_token);
+      if (data.status === 1) {
+        const access_token = data.token.accessToken;
+        localStorage.setItem('access_token', access_token);
+        toast.success(data.message);
+        navigate('/');
+      } else {
+        toast.error(data.message);
+      }
     },
   });
-
   return (
     <div>
-      <section className="bg-gray-50 dark:bg-gray-900">
+      <section className="bg-gray-50">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                 Sign in to your account
               </h1>
               <Box component="form" onSubmit={formik.handleSubmit}>
                 <div>
                   <label
                     htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900"
                   >
                     Your email
                   </label>

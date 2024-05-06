@@ -8,13 +8,13 @@ function SideBar() {
     setShow(!show);
   };
   return (
-    <div className="pl-4 py-4 grid grid-rows-10 h-full">
+    <div className="pl-4 py-4 grid grid-rows-10 h-[610px]">
       {Menu.map((item) => (
         <Fragment key={item.key}>
           <Link
             to={item.src}
             className="grid grid-cols-5 items-center p-1"
-            onClick={handleShow}
+            onClick={item?.child ? handleShow : ''}
           >
             <div className="col-span-1 mr-5">{item.icon}</div>
             <div className="text-[16px] text-gray-900 col-span-3">

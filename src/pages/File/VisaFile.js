@@ -1,13 +1,13 @@
+import { useEffect, useState } from 'react';
 import { ViewIcon } from '../../asset/images/icons';
 import BaseTable from '../../components/BaseTable';
 import Breadcrumb from '../../components/Breadcrumb';
 import Content from '../../components/Content';
 import { useNavigate } from 'react-router-dom';
 import { getRequest } from '../../services/Api';
-import { useEffect, useState } from 'react';
-function OfferLetter() {
+function VisaFile() {
   const [items, setItem] = useState();
-  const title = 'Hồ sơ thư mời';
+  const title = 'Hồ sơ Visa';
   const listBreadcrumb = [
     {
       src: '/',
@@ -15,8 +15,8 @@ function OfferLetter() {
     },
     {
       isCurrentPage: true,
-      src: '/offer-letter',
-      title: 'Hồ sơ thư mời',
+      src: '/visa-file',
+      title: 'Hồ sơ visa',
     },
   ];
   const headers = [
@@ -50,15 +50,15 @@ function OfferLetter() {
     },
   ];
   useEffect(() => {
-    getListOfferLetter();
+    getVisaFile();
   }, []);
-  const getListOfferLetter = async () => {
-    const data = await getRequest('/api/file/offer-letter-file');
+  const getVisaFile = async () => {
+    const data = await getRequest('/api/file/visa-file');
     setItem(data.data);
   };
   const navigate = useNavigate();
   const handleView = (id) => {
-    navigate(`/offer-letter/${id}`);
+    navigate(`/visa-file/${id}`);
   };
   const action = [
     {
@@ -77,4 +77,4 @@ function OfferLetter() {
   );
 }
 
-export default OfferLetter;
+export default VisaFile;

@@ -1,10 +1,13 @@
-function BaseTable({ headers, items, children }) {
+function BaseTable({ headers, items, actions }) {
   return (
-    <table className="table-auto w-full overflow-auto divide-y divide-dashed divide-gray-400">
+    <table className="table-auto w-full overflow-x-scroll divide-y divide-dashed divide-gray-400">
       <thead>
         <tr>
           {headers.map((header, index) => (
-            <th key={index} className="text-lg font-Roboto text-[#616161] p-2">
+            <th
+              key={index}
+              className="text-[16px] font-Roboto text-[#616161] p-2 "
+            >
               <div className="uppercase">{header.title}</div>
             </th>
           ))}
@@ -17,10 +20,24 @@ function BaseTable({ headers, items, children }) {
               {headers.map((header, key) => (
                 <td
                   key={key}
-                  className="py-2 text-[14px] font-medium text-[#545556] font-Roboto tracking-wide text-center"
+                  className="p-1 text-[14px] text-[#545556] font-Roboto tracking-wide text-center"
                 >
                   <div>{item[header.key]}</div>
-                  {header.title === 'action' ? <>{children}</> : <></>}
+                  {header.key === 'action' ? (
+                    <div className="flex items-center justify-center p-0.5 cursor-pointer">
+                      {' '}
+                      {actions.map((action) => (
+                        <div
+                          key={action.key}
+                          onClick={() => action.event(item._id)}
+                        >
+                          {action.component}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </td>
               ))}
             </tr>

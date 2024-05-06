@@ -1,7 +1,6 @@
 import { Box, TextField } from '@mui/material';
 import Breadcrumb from '../../components/Breadcrumb';
 import Content from '../../components/Content';
-import { Link } from 'react-router-dom';
 import { Editor } from '@tinymce/tinymce-react';
 function AddArticle() {
   const title = 'Thêm bài viết';

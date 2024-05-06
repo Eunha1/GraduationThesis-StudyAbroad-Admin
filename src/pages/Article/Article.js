@@ -66,12 +66,24 @@ function Article() {
       title: 'Bài viết',
     },
   ];
-  const handleEdit = () => {
-    console.log('edit');
+  const handleEdit = (id) => {
+    console.log(id);
   };
-  const handleDelete = () => {
-    console.log('delete');
+  const handleDelete = (id) => {
+    console.log(id);
   };
+  const action = [
+    {
+      key: 'edit',
+      component: <PencilIcon />,
+      event: handleEdit,
+    },
+    {
+      key: 'delete',
+      component: <DeleteIcon />,
+      event: handleDelete,
+    },
+  ];
   return (
     <div>
       <Breadcrumb title={title} listBreadcrumb={listBreadcrumb} />
@@ -84,16 +96,7 @@ function Article() {
         </Link>
       </button>
       <Content>
-        <BaseTable headers={header} items={item}>
-          <div className="flex items-center justify-center p-1">
-            <div className="p-1 cursor-pointer" onClick={handleEdit}>
-              <PencilIcon />
-            </div>
-            <div className="p-1 cursor-pointer" onClick={handleDelete}>
-              <DeleteIcon />
-            </div>
-          </div>
-        </BaseTable>
+        <BaseTable headers={header} items={item} actions={action}></BaseTable>
       </Content>
     </div>
   );
