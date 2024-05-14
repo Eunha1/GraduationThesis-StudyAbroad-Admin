@@ -98,7 +98,7 @@ function AddArticle() {
           </div>
         </Box>
       </Content>
-      <div class="fixed bottom-0 right-0 w-[100%] h-[60px] bg-gray-100 shadow-lg ">
+      <div className="fixed bottom-0 right-0 w-[100%] h-[60px] bg-gray-100 shadow-lg ">
         <button className="text-white bg-[#015289] float-right border rounded-lg mr-14 mt-3 px-3 py-1">
           Save
         </button>

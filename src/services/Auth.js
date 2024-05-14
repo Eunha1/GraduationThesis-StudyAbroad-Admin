@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import useAuth from '../hook/useAuth';
+import { checkRoles } from '../utils/Authen';
 
 const RequireAuth = ({ allowedRole }) => {
-  const checkRole = useAuth(allowedRole);
+  const checkRole = checkRoles(allowedRole);
   const content = checkRole ? <Outlet /> : <Navigate to="/login" />;
   return content;
 };

@@ -7,6 +7,8 @@ import {
   InfoOutlined,
   PaidOutlined,
 } from '@mui/icons-material';
+import { ADMIN, ADMISSION_OFFICER, EDU_COUNSELLOR } from './Constant';
+import { NoteIcon, UploadIcon2 } from '../asset/images/icons';
 
 export const Menu = [
   {
@@ -15,6 +17,7 @@ export const Menu = [
     key: 'dashboard',
     icon: <DashboardOutlined />,
     isActive: false,
+    role: [ADMIN, EDU_COUNSELLOR, ADMISSION_OFFICER],
   },
   {
     title: 'Quản lý hồ sơ',
@@ -22,10 +25,11 @@ export const Menu = [
     key: 'file',
     icon: <FilePresent />,
     isActive: false,
+    role: [ADMIN, EDU_COUNSELLOR, ADMISSION_OFFICER],
     child: [
       {
         title: 'Hồ sơ thư mời',
-        src: '/offer-letter',
+        src: '/offer-letter-file',
         key: 'offer-letter',
         isActive: false,
         icon: <AttachFile />,
@@ -45,6 +49,7 @@ export const Menu = [
     key: 'article',
     icon: <ArticleOutlined />,
     isActive: false,
+    role: [ADMIN],
   },
   {
     title: 'Quản lý công việc',
@@ -52,6 +57,7 @@ export const Menu = [
     key: 'assign',
     isActive: false,
     icon: <AssignmentLateOutlined />,
+    role: [ADMIN],
   },
   {
     title: 'Thông tin tư vấn',
@@ -59,12 +65,46 @@ export const Menu = [
     key: 'advise-info',
     isActive: false,
     icon: <InfoOutlined />,
+    role: [ADMIN],
   },
   {
-    title: 'Hoa hồng',
+    title: 'Commission',
     src: '/commission',
     key: 'commission',
     isActive: false,
     icon: <PaidOutlined />,
+    role: [ADMIN],
+  },
+  {
+    title: 'Upload',
+    src: '/',
+    key: 'record',
+    isActive: false,
+    icon: <UploadIcon2 />,
+    role: [EDU_COUNSELLOR, ADMISSION_OFFICER],
+    child: [
+      {
+        title: 'Thư mời',
+        src: '/record/offer-letter',
+        key: 'offer-letter',
+        isActive: false,
+        icon: <AttachFile />,
+      },
+      {
+        title: 'Visa',
+        src: '/record/visa',
+        key: 'visa',
+        isActive: false,
+        icon: <AttachFile />,
+      },
+    ],
+  },
+  {
+    title: 'Thông tin tư vấn',
+    src: '/consultation',
+    key: 'Consultation',
+    isActive: false,
+    icon: <NoteIcon />,
+    role: [EDU_COUNSELLOR],
   },
 ];

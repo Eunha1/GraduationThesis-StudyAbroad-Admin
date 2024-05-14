@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 import { ArrowDouwn } from '../../asset/images/icons';
 import { Menu } from '../../utils/Menu';
 import { Link } from 'react-router-dom';
+import { checkRoles } from '../../utils/Authen';
 function SideBar() {
   const [show, setShow] = useState(false);
   const handleShow = () => {
@@ -11,23 +12,27 @@ function SideBar() {
     <div className="pl-4 py-4 grid grid-rows-10 h-[610px]">
       {Menu.map((item) => (
         <Fragment key={item.key}>
-          <Link
-            to={item.src}
-            className="grid grid-cols-5 items-center p-1"
-            onClick={item?.child ? handleShow : ''}
-          >
-            <div className="col-span-1 mr-5">{item.icon}</div>
-            <div className="text-[16px] text-gray-900 col-span-3">
-              {item.title}
-            </div>
-            {item?.child && item?.child.length > 0 ? (
-              <div className="col-span-1 ml-3">
-                <ArrowDouwn />
+          {checkRoles(item.role) ? (
+            <Link
+              to={item.src}
+              className="grid grid-cols-5 items-center p-1"
+              onClick={item?.child ? handleShow : ''}
+            >
+              <div className="col-span-1 mr-5">{item.icon}</div>
+              <div className="text-[16px] text-gray-900 col-span-3">
+                {item.title}
               </div>
-            ) : (
-              <></>
-            )}
-          </Link>
+              {item?.child && item?.child.length > 0 ? (
+                <div className="col-span-1 ml-3">
+                  <ArrowDouwn />
+                </div>
+              ) : (
+                <></>
+              )}
+            </Link>
+          ) : (
+            <></>
+          )}
           {item?.child && show ? (
             <>
               {item?.child.map((child) => (

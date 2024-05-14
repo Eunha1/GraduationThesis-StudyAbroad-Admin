@@ -1,15 +1,15 @@
-import { ViewIcon, DeleteIcon, PencilIcon } from '../../asset/images/icons';
 import BaseTable from '../../components/BaseTable';
 import Breadcrumb from '../../components/Breadcrumb';
 import Content from '../../components/Content';
-import { useNavigate, Link } from 'react-router-dom';
+import { ViewIcon, PencilIcon, DeleteIcon } from '../../asset/images/icons';
+import { EDU_COUNSELLOR } from '../../utils/Constant';
 import { getRequest, postRequest } from '../../services/Api';
 import { useEffect, useState } from 'react';
-import { ADMIN, ADMISSION_OFFICER, EDU_COUNSELLOR } from '../../utils/Constant';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-function OfferLetter() {
+function Consultation() {
+  const title = 'Thông tin tư vấn';
   const [items, setItem] = useState();
-  const title = 'Hồ sơ thư mời';
   const listBreadcrumb = [
     {
       src: '/',
@@ -17,8 +17,8 @@ function OfferLetter() {
     },
     {
       isCurrentPage: true,
-      src: '/offer-letter-file',
-      title: 'Hồ sơ thư mời',
+      src: '/consultation',
+      title: 'Thông tin tư vấn',
     },
   ];
   const headers = [
@@ -35,39 +35,32 @@ function OfferLetter() {
       title: 'Số điện thoại',
     },
     {
-      key: 'customer_email',
-      title: 'Email',
+      key: 'school',
+      title: 'Trường dự định học',
     },
     {
-      key: 'customer_address',
-      title: 'Địa chỉ',
-    },
-    {
-      key: 'status',
-      title: 'Trạng thái',
+      key: 'majors',
+      title: 'Ngành học',
     },
     {
       key: 'action',
       title: 'Action',
     },
   ];
-  useEffect(() => {
-    getListOfferLetter();
-  }, []);
-  const getListOfferLetter = async () => {
-    const data = await getRequest('/api/file/offer-letter-file');
-    setItem(data.data);
-  };
   const navigate = useNavigate();
   const handleView = (id) => {
-    navigate(`/offer-letter/${id}`);
+    navigate(`/consultation/${id}`);
   };
-  const handleEdit = (id) => {};
+  const handleEdit = (id) => {
+    navigate(`/consultation/update/${id}`);
+  };
   const handleDelete = async (id) => {
-    const data = await postRequest(`/api/file/delete/offer-letter-file/${id}`);
+    const data = await postRequest(
+      `/api/consultation/delete/consultation/${id}`,
+    );
     if (data.status === 1) {
       toast.success(data.message);
-      getListOfferLetter();
+      getListConsultation();
     } else {
       toast.error(data.message);
     }
@@ -77,37 +70,45 @@ function OfferLetter() {
       key: 'view-detail',
       component: <ViewIcon />,
       event: handleView,
-      role: [ADMIN, EDU_COUNSELLOR, ADMISSION_OFFICER],
+      role: [EDU_COUNSELLOR],
     },
     {
       key: 'edit-file',
       component: <PencilIcon />,
       event: handleEdit,
-      role: [EDU_COUNSELLOR, ADMISSION_OFFICER],
+      role: [EDU_COUNSELLOR],
     },
     {
       key: 'delete-file',
       component: <DeleteIcon />,
       event: handleDelete,
-      role: [EDU_COUNSELLOR, ADMISSION_OFFICER],
+      role: [EDU_COUNSELLOR],
     },
   ];
+  useEffect(() => {
+    getListConsultation();
+    // eslint-disable-next-line
+  }, []);
+  const getListConsultation = async () => {
+    const data = await getRequest('/api/consultation/list-consultation');
+    setItem(data.data);
+  };
   return (
     <div>
       <Breadcrumb title={title} listBreadcrumb={listBreadcrumb} />
       <button className="border rounded-lg bg-[#015289] my-4 p-1 px-3 flex justify-center ">
         <Link
-          to="/offer-letter/upload"
+          to="/consultation/new-consultation"
           className="text-white text-base font-Roboto"
         >
           Thêm
         </Link>
       </button>
       <Content>
-        <BaseTable headers={headers} items={items} actions={action}></BaseTable>
+        <BaseTable headers={headers} actions={action} items={items} />
       </Content>
     </div>
   );
 }
 
-export default OfferLetter;
+export default Consultation;

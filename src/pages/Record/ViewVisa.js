@@ -1,48 +1,45 @@
+import { useParams } from 'react-router-dom';
+import BaseTableImage from '../../components/BaseTableImage';
 import Breadcrumb from '../../components/Breadcrumb';
 import Content from '../../components/Content';
-import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getRequest } from '../../services/Api';
-import BaseTableImage from '../../components/BaseTableImage';
 import { convertDate } from '../../utils/Convert';
-function OfferLetterDetail() {
+function ViewVisa() {
+  const { visa_id } = useParams();
   const [infomation, setInfomation] = useState();
-  const [imagesList, setImageList] = useState([]);
-  const { letterId } = useParams();
-  const title = 'Chi tiết hồ sơ';
+  const title = 'Chi tiết visa';
   const listBreadcrumb = [
     {
       src: '/',
       title: 'Trang chủ',
     },
     {
-      src: '/offer-letter-file',
-      title: 'Hồ sơ thư mời',
+      src: '/record/visa',
+      title: 'visa',
     },
     {
       isCurrentPage: true,
-      src: `/offer-letter/${letterId}`,
-      title: 'Chi tiết hồ sơ',
+      src: `/record/visa/${visa_id}`,
+      title: 'Chi tiết visa',
     },
   ];
   const headers = [
     {
-      title: 'Name',
       key: 'name',
+      title: 'Name',
     },
     {
-      title: 'Danh sách hình ảnh',
       key: 'imageList',
+      title: 'Danh sách hình ảnh',
     },
   ];
   useEffect(() => {
-    getDetailOfferLetter();
-    // eslint-disable-next-line
+    getRecordVisa();
   }, []);
-  const getDetailOfferLetter = async () => {
-    const data = await getRequest(`/api/file/offer-letter/${letterId}`);
+  const getRecordVisa = async () => {
+    const data = await getRequest(`/api/file/record/visa/${visa_id}`);
     setInfomation(data.data);
-    setImageList(data.data.imagesList);
   };
   return (
     <div>
@@ -65,18 +62,20 @@ function OfferLetterDetail() {
                   {infomation.customer_address}
                 </div>
                 <div className="py-1">
-                  <span className="font-medium mr-3">Trường theo học :</span>
-                  {infomation.school_name}
+                  <span className="font-medium mr-3">Quốc gia có visa :</span>
+                  {infomation.country}
                 </div>
               </div>
               <div className="col-span-1 ml-[20px]">
                 <div className="py-1">
-                  <span className="font-medium mr-3">Tên nhân viên :</span>
-                  {infomation.Staff_name}
+                  <span className="font-medium mr-3">
+                    Địa chỉ email khách hàng :
+                  </span>
+                  {infomation.customer_email}
                 </div>
                 <div className="py-1">
-                  <span className="font-medium mr-3">Số điện thoại :</span>
-                  {infomation.Staff_phone}
+                  <span className="font-medium mr-3">Tên nhân viên :</span>
+                  {infomation.Staff_name}
                 </div>
                 <div className="py-1">
                   <span className="font-medium mr-3">Thời gian cập nhật :</span>
@@ -89,7 +88,10 @@ function OfferLetterDetail() {
               </div>
             </div>
             <div className="mt-[50px]">
-              <BaseTableImage headers={headers} imageList={imagesList} />
+              <BaseTableImage
+                headers={headers}
+                imageList={infomation.imagesList}
+              />
             </div>
           </div>
         ) : (
@@ -100,4 +102,4 @@ function OfferLetterDetail() {
   );
 }
 
-export default OfferLetterDetail;
+export default ViewVisa;

@@ -1,15 +1,15 @@
-import { ViewIcon, DeleteIcon, PencilIcon } from '../../asset/images/icons';
-import BaseTable from '../../components/BaseTable';
 import Breadcrumb from '../../components/Breadcrumb';
 import Content from '../../components/Content';
-import { useNavigate, Link } from 'react-router-dom';
+import BaseTable from '../../components/BaseTable';
 import { getRequest, postRequest } from '../../services/Api';
 import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ViewIcon, PencilIcon, DeleteIcon } from '../../asset/images/icons';
 import { ADMIN, ADMISSION_OFFICER, EDU_COUNSELLOR } from '../../utils/Constant';
 import { toast } from 'react-toastify';
-function OfferLetter() {
+function VisaDetail() {
   const [items, setItem] = useState();
-  const title = 'Hồ sơ thư mời';
+  const title = 'Visa';
   const listBreadcrumb = [
     {
       src: '/',
@@ -17,8 +17,8 @@ function OfferLetter() {
     },
     {
       isCurrentPage: true,
-      src: '/offer-letter-file',
-      title: 'Hồ sơ thư mời',
+      src: '/record/visa',
+      title: 'Visa',
     },
   ];
   const headers = [
@@ -35,16 +35,8 @@ function OfferLetter() {
       title: 'Số điện thoại',
     },
     {
-      key: 'customer_email',
-      title: 'Email',
-    },
-    {
-      key: 'customer_address',
-      title: 'Địa chỉ',
-    },
-    {
-      key: 'status',
-      title: 'Trạng thái',
+      key: 'country',
+      title: 'Quốc gia có visa',
     },
     {
       key: 'action',
@@ -52,22 +44,24 @@ function OfferLetter() {
     },
   ];
   useEffect(() => {
-    getListOfferLetter();
+    getListRecordVisa();
   }, []);
-  const getListOfferLetter = async () => {
-    const data = await getRequest('/api/file/offer-letter-file');
-    setItem(data.data);
+  const getListRecordVisa = async () => {
+    const data = await getRequest('/api/file/record/visa');
+    if (data.status === 1) {
+      setItem(data.data);
+    }
   };
   const navigate = useNavigate();
   const handleView = (id) => {
-    navigate(`/offer-letter/${id}`);
+    navigate(`/record/visa/${id}`);
   };
   const handleEdit = (id) => {};
   const handleDelete = async (id) => {
-    const data = await postRequest(`/api/file/delete/offer-letter-file/${id}`);
+    const data = await postRequest(`/api/file/delete/visa-record/${id}`);
     if (data.status === 1) {
       toast.success(data.message);
-      getListOfferLetter();
+      getListRecordVisa();
     } else {
       toast.error(data.message);
     }
@@ -97,7 +91,7 @@ function OfferLetter() {
       <Breadcrumb title={title} listBreadcrumb={listBreadcrumb} />
       <button className="border rounded-lg bg-[#015289] my-4 p-1 px-3 flex justify-center ">
         <Link
-          to="/offer-letter/upload"
+          to="/record/visa/upload"
           className="text-white text-base font-Roboto"
         >
           Thêm
@@ -110,4 +104,4 @@ function OfferLetter() {
   );
 }
 
-export default OfferLetter;
+export default VisaDetail;

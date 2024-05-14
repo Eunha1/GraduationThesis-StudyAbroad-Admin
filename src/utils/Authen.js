@@ -1,6 +1,6 @@
 import { jwtDecode } from 'jwt-decode';
 
-function useAuth(allowedRole) {
+export function checkRoles(allowedRole) {
   const token = localStorage.getItem('access_token');
   if (token) {
     const decode = jwtDecode(token);
@@ -13,5 +13,3 @@ function useAuth(allowedRole) {
   }
   return false;
 }
-
-export default useAuth;

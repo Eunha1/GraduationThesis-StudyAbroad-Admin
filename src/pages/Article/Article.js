@@ -3,6 +3,7 @@ import Content from '../../components/Content';
 import { DeleteIcon, PencilIcon } from '../../asset/images/icons';
 import Breadcrumb from '../../components/Breadcrumb';
 import { Link } from 'react-router-dom';
+import { ADMIN } from '../../utils/Constant';
 function Article() {
   const header = [
     {
@@ -77,11 +78,13 @@ function Article() {
       key: 'edit',
       component: <PencilIcon />,
       event: handleEdit,
+      role: [ADMIN],
     },
     {
       key: 'delete',
       component: <DeleteIcon />,
       event: handleDelete,
+      role: [ADMIN],
     },
   ];
   return (

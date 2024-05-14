@@ -399,3 +399,190 @@ export const DownloadImage = ({
     />
   </svg>
 );
+export const ImageView = ({
+  width = '1.6rem',
+  height = '1.6rem',
+  className,
+}) => (
+  <svg
+    className={className}
+    width={width}
+    height={height}
+    xmlns="http://www.w3.org/2000/svg"
+    fillRule="evenodd"
+    clipRule="evenodd"
+    viewBox="0 0 512 396.94"
+  >
+    <path
+      fillRule="nonzero"
+      d="M49.63 0h336.95c13.64 0 26.03 5.64 35 14.6l.82.91c8.52 8.93 13.79 21.03 13.79 34.13v182.01c-8.72-2.42-17.63-4.27-26.69-5.48V192.2l-36.96 32.61c-21.85 1.34-42.73 6.43-62.42 14.53l-40.98-39.31-27.44 78.69c-.4 2.81-1.59 5.18-3.25 7.02l-1.7 1.57c-5.12 3.94-12.95 3.92-17.94-1.81l-78.13-118.22L26.7 262.86v79.61c0 6.25 2.62 11.97 6.77 16.13 4.19 4.19 9.95 6.81 16.16 6.81H235c10.6 9.86 21.96 18.81 33.95 26.69H49.63c-13.57 0-26.02-5.61-35.03-14.63-8.96-8.96-14.6-21.37-14.6-35V49.64c0-13.66 5.59-26.09 14.57-35.07l.92-.84C24.42 5.24 36.46 0 49.63 0zm337.74 292.43c9.66 0 18.41 3.92 24.74 10.24 6.33 6.33 10.24 15.07 10.24 24.74 0 9.65-3.91 18.41-10.24 24.73-6.33 6.33-15.06 10.25-24.74 10.25-9.65 0-18.4-3.92-24.73-10.25a34.82 34.82 0 0 1-10.24-24.73c0-9.65 3.91-18.41 10.24-24.74 6.33-6.32 15.08-10.24 24.73-10.24zm-122.68 29.88c28.32-34.25 72.44-63.49 117.77-64.39 48.01-.97 96.09 29.72 127.66 64.45a7.207 7.207 0 0 1 .47 9.14c-26.32 37.15-73.49 65.2-119.34 65.43-46.78.21-97.89-28.89-126.93-65.24-2.25-2.84-2.03-6.84.37-9.39zm20.04 4.96c26.61 30.85 65.31 52.73 106.3 52.55 39.43-.19 75.09-21.01 99.09-52.07-28.24-29.46-65.39-53.54-107.15-52.72-39.06.79-73.06 23.66-98.24 52.24zM26.7 227.39c29.55-26.64 76.84-63.89 106.71-88.99 4.87-4.22 12.12-4.13 16.91-.04.97.81 1.68 1.78 2.49 2.75l67.52 105.51 26.92-75.68c1.99-10.57 14.47-14.08 22.04-7.05l62.79 60.12 77.42-72.04V49.64c0-5.94-2.36-11.48-6.2-15.61l-.6-.56c-4.16-4.15-9.88-6.77-16.12-6.77H49.63c-6.04 0-11.54 2.34-15.61 6.12l-.58.62c-4.15 4.16-6.74 9.9-6.74 16.2v177.75zM267.63 61.07c11.02 0 21.04 4.49 28.28 11.73 7.24 7.24 11.72 17.23 11.72 28.28 0 11.02-4.48 21.04-11.72 28.28-7.24 7.24-17.26 11.72-28.28 11.72-11.04 0-21.04-4.48-28.28-11.72-7.24-7.24-11.72-17.26-11.72-28.28 0-11.05 4.48-21.04 11.72-28.28 7.24-7.24 17.24-11.73 28.28-11.73zm12.21 27.8a17.249 17.249 0 0 0-12.21-5.04c-4.77 0-9.09 1.93-12.2 5.04a17.198 17.198 0 0 0-5.05 12.21c0 4.77 1.93 9.09 5.05 12.2 3.11 3.11 7.43 5.05 12.2 5.05s9.09-1.94 12.21-5.05c3.11-3.11 5.04-7.43 5.04-12.2s-1.93-9.1-5.04-12.21z"
+    />
+  </svg>
+);
+export const UpLoadIcon = ({
+  width = '1.6rem',
+  height = '1.6rem',
+  className,
+}) => (
+  <svg
+    className={className}
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15"
+      stroke="#4097A3"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M17 8L12 3L7 8"
+      stroke="#4097A3"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12 3V15"
+      stroke="#4097A3"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const ImageDrop = ({
+  width = '1.6rem',
+  height = '1.6rem',
+  className,
+}) => (
+  <svg
+    className={className}
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M9 10C10.1046 10 11 9.10457 11 8C11 6.89543 10.1046 6 9 6C7.89543 6 7 6.89543 7 8C7 9.10457 7.89543 10 9 10Z"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M13 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V10"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M16.5601 6.94006L20.4401 3.06006"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    <path
+      d="M20.4401 6.94006L16.5601 3.06006"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    <path
+      d="M2.66992 18.9501L7.59992 15.6401C8.38992 15.1101 9.52992 15.1701 10.2399 15.7801L10.5699 16.0701C11.3499 16.7401 12.6099 16.7401 13.3899 16.0701L17.5499 12.5001C18.3299 11.8301 19.5899 11.8301 20.3699 12.5001L21.9999 13.9001"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const UploadIcon2 = ({
+  width = '1.4rem',
+  height = '1.4rem',
+  className,
+}) => (
+  <svg
+    className={className}
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M12 9V2L10 4"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12 2L14 4"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M1.97998 13H6.38998C6.76998 13 7.10998 13.21 7.27998 13.55L8.44998 15.89C8.78998 16.57 9.47998 17 10.24 17H13.77C14.53 17 15.22 16.57 15.56 15.89L16.73 13.55C16.9 13.21 17.25 13 17.62 13H21.98"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M7 5.12988C3.46 5.64988 2 7.72988 2 11.9999V14.9999C2 19.9999 4 21.9999 9 21.9999H15C20 21.9999 22 19.9999 22 14.9999V11.9999C22 7.72988 20.54 5.64988 17 5.12988"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+export const NoteIcon = ({
+  width = '1.4rem',
+  height = '1.4rem',
+  className,
+}) => (
+  <svg
+    className={className}
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M11 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V13"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M16.04 3.01976L8.16 10.8998C7.86 11.1998 7.56 11.7898 7.5 12.2198L7.07 15.2298C6.91 16.3198 7.68 17.0798 8.77 16.9298L11.78 16.4998C12.2 16.4398 12.79 16.1398 13.1 15.8398L20.98 7.95976C22.34 6.59976 22.98 5.01976 20.98 3.01976C18.98 1.01976 17.4 1.65976 16.04 3.01976Z"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M14.91 4.1499C15.58 6.5399 17.45 8.4099 19.85 9.0899"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);

@@ -1,24 +1,41 @@
-import { Tooltip } from '@mui/material';
-import { DownloadImage } from '../asset/images/icons';
+import { Fade, Modal, Tooltip } from '@mui/material';
+import { DownloadImage, ImageView } from '../asset/images/icons';
 import {
-    extractFilename,
+  extractFilename,
   extractOriginalFilename,
   extractTimestampAndConvertToDate,
 } from '../utils/Convert';
-import { useRef } from 'react';
+import { useState } from 'react';
 
 function BaseTableImage({ headers, imageList }) {
-  const imageRef = useRef()
-  let fileHandle 
-  const handleDownload =async () => {
-    const imageURL = imageRef.current.currentSrc;
-    [fileHandle] = await window.showSaveFilePicker();
-    console.log(fileHandle)
-    const writable = await fileHandle.createWritable()
-    const response = await fetch(imageURL);
-    await response.body.pipeTo(writable);
-
-    alert('Tải xuống thành công!');
+  const [open, setOpen] = useState(false);
+  const [imageURL, setImageURL] = useState('');
+  const handleDownload = async (imageURL) => {
+    const imageName = extractFilename(imageURL);
+    const options = {
+      suggestedName: imageName,
+      types: [
+        {
+          description: 'Images',
+          accept: { 'image/*': ['.png', '.jpg', '.jpeg', '.webp'] },
+        },
+      ],
+    };
+    try {
+      const fileHandle = await window.showSaveFilePicker(options);
+      const writable = await fileHandle.createWritable();
+      const response = await fetch(imageURL);
+      await response.body.pipeTo(writable);
+    } catch (error) {
+      return;
+    }
+  };
+  const handleView = (image) => {
+    setImageURL(image);
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
   };
   return (
     <table className="table-auto w-full overflow-x-scroll divide-y divide-dashed divide-gray-400">
@@ -51,7 +68,6 @@ function BaseTableImage({ headers, imageList }) {
                           src={image}
                           alt="image"
                           className="h-full w-full object-cover"
-                          ref={imageRef}
                         />
                       </div>
                     </div>
@@ -65,18 +81,38 @@ function BaseTableImage({ headers, imageList }) {
                         {extractTimestampAndConvertToDate(image)}
                       </div>
                     </div>
-                    <div className="col-span-1 mt-3 cursor-pointer">
-                      <Tooltip title="Download" placement="right">
+                    <div className="col-span-1 mt-3 cursor-pointer flex">
+                      <Tooltip title="Download" placement="bottom">
                         <div
                           className="w-[30px] h-[30px]"
-                          onClick={handleDownload}
+                          onClick={() => handleDownload(image)}
                         >
                           <DownloadImage />
+                        </div>
+                      </Tooltip>
+                      <Tooltip title="View" placement="right">
+                        <div
+                          className="w-[30px] h-[30px] ml-3"
+                          onClick={() => handleView(image)}
+                        >
+                          <ImageView />
                         </div>
                       </Tooltip>
                     </div>
                   </div>
                 ))}
+                <div>
+                  <Modal
+                    className="flex items-center justify-center"
+                    open={open}
+                    onClose={handleClose}
+                  >
+                    <Fade in={open} timeout={500} className="outline-none">
+                      {/* eslint-disable-next-line */}
+                      <img src={imageURL} alt="image" />
+                    </Fade>
+                  </Modal>
+                </div>
               </td>
             </tr>
           ))}

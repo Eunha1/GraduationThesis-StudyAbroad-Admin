@@ -34,3 +34,15 @@ export async function postRequest(url, body) {
     return error;
   }
 }
+export async function postRequestFormData(url, body) {
+  try {
+    let response = await instance.post(url, body, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+}

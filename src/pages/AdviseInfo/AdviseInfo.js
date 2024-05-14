@@ -5,6 +5,7 @@ import { ViewIcon } from '../../asset/images/icons';
 import { useNavigate } from 'react-router-dom';
 import { getRequest } from '../../services/Api';
 import { useEffect, useState } from 'react';
+import { ADMIN } from '../../utils/Constant';
 function AdviseInfo() {
   const [items, setItem] = useState();
   const title = 'Thông tin tư vấn';
@@ -77,6 +78,7 @@ function AdviseInfo() {
       key: 'view-detail',
       component: <ViewIcon />,
       event: handleView,
+      role: [ADMIN],
     },
   ];
   return (
