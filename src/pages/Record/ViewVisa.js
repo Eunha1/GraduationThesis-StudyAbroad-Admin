@@ -36,6 +36,7 @@ function ViewVisa() {
   ];
   useEffect(() => {
     getRecordVisa();
+    // eslint-disable-next-line
   }, []);
   const getRecordVisa = async () => {
     const data = await getRequest(`/api/file/record/visa/${visa_id}`);

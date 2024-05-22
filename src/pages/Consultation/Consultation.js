@@ -7,9 +7,12 @@ import { getRequest, postRequest } from '../../services/Api';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 function Consultation() {
   const title = 'Thông tin tư vấn';
   const [items, setItem] = useState();
+  const [open, setOpen] = useState(false)
+  const [idConsultation, setIdConsultation] = useState()
   const listBreadcrumb = [
     {
       src: '/',
@@ -54,9 +57,12 @@ function Consultation() {
   const handleEdit = (id) => {
     navigate(`/consultation/update/${id}`);
   };
-  const handleDelete = async (id) => {
+  const handleClose = ()=>{
+    setOpen(false)
+  }
+  const handleRemove = async ()=>{
     const data = await postRequest(
-      `/api/consultation/delete/consultation/${id}`,
+      `/api/consultation/delete/consultation/${idConsultation}`,
     );
     if (data.status === 1) {
       toast.success(data.message);
@@ -64,6 +70,11 @@ function Consultation() {
     } else {
       toast.error(data.message);
     }
+    setOpen(false)
+  }
+  const handleDelete =  (id) => {
+    setOpen(true)
+    setIdConsultation(id)
   };
   const action = [
     {
@@ -107,6 +118,22 @@ function Consultation() {
       <Content>
         <BaseTable headers={headers} actions={action} items={items} />
       </Content>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle>
+          Remove consultation
+        </DialogTitle>
+        <DialogContent>
+         <p>Do you want to remove this consultation</p> 
+        </DialogContent>
+        <DialogActions
+        >
+          <button className='px-2 py-1 rounded-lg border-[1px] border-gray-900 hover:bg-gray-100' onClick={handleClose}>Cancel</button>
+          <button className='px-2 py-1 rounded-lg bg-[#D0021B] text-white hover:bg-red-700' onClick={handleRemove}>Remove</button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

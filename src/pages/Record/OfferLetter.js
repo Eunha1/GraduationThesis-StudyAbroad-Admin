@@ -1,18 +1,15 @@
 import Breadcrumb from '../../components/Breadcrumb';
 import Content from '../../components/Content';
 import { Box, TextField } from '@mui/material';
-import { Fade, Modal } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useState } from 'react';
-import { ImageDrop } from '../../asset/images/icons';
 import { postRequest } from '../../services/Api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import UploadImage from '../../components/UploadImage';
 function OfferLetterRecord() {
   const [offerLetter, setOfferLetter] = useState([]);
-  const [imageURL, setImageURL] = useState('');
-  const [open, setOpen] = useState(false);
   const title = 'Thêm thư mời';
   const listBreadcrumb = [
     {
@@ -29,11 +26,6 @@ function OfferLetterRecord() {
       title: 'Upload thư mời',
     },
   ];
-  const handleView = (file) => {
-    const url = URL.createObjectURL(file.file);
-    setImageURL(url);
-    setOpen(true);
-  };
   const validationSchema = yup.object({
     phone: yup.string('Enter your phone').required('Phone is required'),
     school: yup.string('Enter school name').required('School is required'),
@@ -61,13 +53,11 @@ function OfferLetterRecord() {
       }
     },
   });
-  const handleOfferLetter = (event) => {
-    setOfferLetter([...offerLetter, { file: event.target.files[0] }]);
+  const handleOfferLetter = (newImageList) => {
+    setOfferLetter(newImageList);
   };
-  const handleDropOfferLetter = (index) => {
-    const newData = [...offerLetter];
-    newData.splice(index, 1);
-    setOfferLetter(newData);
+  const handleCancel = () => {
+    navigate('/record/offer-letter');
   };
   return (
     <div>
@@ -100,7 +90,7 @@ function OfferLetterRecord() {
                 type="text"
                 name="school"
                 variant="outlined"
-                label="Enter scholl"
+                label="Enter scho0l"
                 placeholder="Enter school name"
                 size="small"
                 value={formik.values.school}
@@ -110,77 +100,22 @@ function OfferLetterRecord() {
               />
             </div>
           </div>
-          <div className="col-span-1 grid grid-cols-6">
-            <label className="mr-5 font-bold mt-5 col-span-2">Thư mời</label>
-            <div className="flex my-5 col-span-3">
-              <div className="w-[80px]">
-                <label htmlFor="certificate" className="cursor-pointer">
-                  <div className="relative ">
-                    <div className="py-[1px] px-1 border-[0.5px] border-gray-500 text-center rounded-md">
-                      Chọn tệp
-                    </div>
-                    <input
-                      type="file"
-                      id="certificate"
-                      accept="image/*"
-                      multiple
-                      onChange={(event) => handleOfferLetter(event)}
-                      className="absolute z-[-1] opacity-0"
-                    />
-                  </div>
-                </label>
-              </div>
-              <div className="ml-[30px]">
-                {[...offerLetter].length > 0 ? (
-                  [...offerLetter].map((item, index) => (
-                    <div key={index}>
-                      {item.file?.name ? (
-                        <div className="flex">
-                          <div className="h-[30px] w-[250px] border-[1px] border-gray-800 rounded shadow-xl shadow-gray-200 bg-gray-50 mb-4 mr-4 cursor-pointer">
-                            <div
-                              className="text-black font-Roboto text-[14px] italic flex items-center px-4 h-full"
-                              onClick={() => handleView(item)}
-                            >
-                              {item.file.name}
-                            </div>
-                          </div>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => handleDropOfferLetter(index)}
-                          >
-                            <ImageDrop />
-                          </div>
-                        </div>
-                      ) : (
-                        <></>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-red-500">Please choose your image</div>
-                )}
-              </div>
+          <UploadImage title="Thư mời" onImageUpload={handleOfferLetter} />
+          <div className="border-t border-gray-700 mt-[50px]">
+            <div className="mt-8 flex justify-end items-center">
+              <button
+                className=" font-medium rounded-lg text-lg px-2 py-1 w-[70px] text-center border-[1px] border-gray-900 mr-5"
+                onClick={handleCancel}
+              >
+                Cancel
+              </button>
+              <button
+                className=" text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-lg px-3 py-1 w-[70px] text-center"
+                type="submit"
+              >
+                Save
+              </button>
             </div>
-          </div>
-          <div>
-            <Modal
-              className="flex items-center justify-center"
-              open={open}
-              onClose={() => setOpen(false)}
-            >
-              <Fade in={open} timeout={500} className="outline-none">
-                {/* eslint-disable-next-line */}
-                <img src={imageURL} alt="image" />
-              </Fade>
-            </Modal>
-          </div>
-          <div>
-            <button
-              className="border-[1px] border-gray-800 px-3 rounded-md"
-              type="submit"
-            >
-              Save
-            </button>
           </div>
         </Box>
       </Content>

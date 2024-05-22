@@ -1,12 +1,15 @@
 import { useParams } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumb';
 import Content from '../../components/Content';
-import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { Box, TextField, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getRequest, postRequest } from '../../services/Api';
+import { toast } from 'react-toastify';
 function UpdateConsultation() {
   const { consultation_id } = useParams();
+  const [info, setInfo] = useState();
   const title = 'Cập nhật thông tin tư vấn';
   const listBreadcrumb = [
     {
@@ -24,14 +27,8 @@ function UpdateConsultation() {
     },
   ];
   const navigate = useNavigate();
-  const validationSchema = yup.object({
-    customer_phone: yup
-      .string('Enter customer phone')
-      .required('Phone is required'),
-  });
   const formik = useFormik({
     initialValues: {
-      customer_phone: '',
       school_year: '',
       school: '',
       level: '',
@@ -42,8 +39,18 @@ function UpdateConsultation() {
       note: '',
       status: '',
     },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {},
+    onSubmit: async (values) => {
+      const data = await postRequest(
+        `/api/consultation/update-consultation/${consultation_id}`,
+        values,
+      );
+      if (data.status === 1) {
+        toast.success(data.message);
+        navigate('/consultation');
+      } else {
+        toast.error(data.message);
+      }
+    },
   });
   const listStatus = [
     { id: 0, status: 'Không tiềm năng' },
@@ -52,6 +59,26 @@ function UpdateConsultation() {
   const handleCancel = () => {
     navigate('/consultation');
   };
+  useEffect(() => {
+    getConsultationInfo();
+    // eslint-disable-next-line
+  }, []);
+  const getConsultationInfo = async () => {
+    const data = await getRequest(
+      `/api/consultation/consultation-detail/${consultation_id}`,
+    );
+    formik.setFieldValue('school_year', data.data.school_year);
+    formik.setFieldValue('school', data.data.school_name);
+    formik.setFieldValue('level', data.data.level);
+    formik.setFieldValue('country', data.data.country);
+    formik.setFieldValue('majors', data.data.majors);
+    formik.setFieldValue('note', data.data.note);
+    formik.setFieldValue('schoolarship', data.data.schoolarship);
+    formik.setFieldValue('finance', data.data.finance);
+    formik.setFieldValue('status', data.data.status);
+    setInfo(data.data);
+  };
+
   return (
     <div>
       <Breadcrumb title={title} listBreadcrumb={listBreadcrumb} />
@@ -69,15 +96,7 @@ function UpdateConsultation() {
                 label="Enter phone"
                 placeholder="Enter customer phone"
                 size="small"
-                value={formik.values.customer_phone}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.customer_phone &&
-                  Boolean(formik.errors.customer_phone)
-                }
-                helperText={
-                  formik.touched.customer_phone && formik.errors.customer_phone
-                }
+                value={info?.customer_phone ? info?.customer_phone : ''}
               />
             </div>
             <div className="cols-span-1 flex flex-col">
@@ -199,10 +218,13 @@ function UpdateConsultation() {
                 label="Choose status"
                 placeholder="Choose status"
                 size="small"
-                value={formik.values.id}
-                onChange={(event) =>
-                  formik.setFieldValue('status', event.target.value)
-                }
+                defaultValue=""
+                value={formik.values.status}
+                onChange={(event) => {
+                  if (event.target.value !== undefined) {
+                    formik.setFieldValue('status', event.target.value);
+                  }
+                }}
               >
                 {listStatus.map((option, index) => (
                   <MenuItem key={index} value={option.id}>

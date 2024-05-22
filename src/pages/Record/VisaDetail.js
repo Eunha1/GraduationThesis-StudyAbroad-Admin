@@ -7,8 +7,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ViewIcon, PencilIcon, DeleteIcon } from '../../asset/images/icons';
 import { ADMIN, ADMISSION_OFFICER, EDU_COUNSELLOR } from '../../utils/Constant';
 import { toast } from 'react-toastify';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 function VisaDetail() {
   const [items, setItem] = useState();
+  const [open, setOpen] = useState(false)
+  const [idVisa, setIdVisa] = useState()
   const title = 'Visa';
   const listBreadcrumb = [
     {
@@ -56,15 +59,24 @@ function VisaDetail() {
   const handleView = (id) => {
     navigate(`/record/visa/${id}`);
   };
-  const handleEdit = (id) => {};
-  const handleDelete = async (id) => {
-    const data = await postRequest(`/api/file/delete/visa-record/${id}`);
+  const handleEdit = (id) => {
+    navigate(`/record/update-visa/${id}`);
+  };
+  const handleClose = ()=>{
+    setOpen(false)
+  }
+  const handleRemove = async ()=>{
+    const data = await postRequest(`/api/file/delete/visa-record/${idVisa}`);
     if (data.status === 1) {
       toast.success(data.message);
       getListRecordVisa();
     } else {
       toast.error(data.message);
     }
+  }
+  const handleDelete =  (id) => {
+    setOpen(true)
+    setIdVisa(id)
   };
   const action = [
     {
@@ -100,6 +112,22 @@ function VisaDetail() {
       <Content>
         <BaseTable headers={headers} items={items} actions={action}></BaseTable>
       </Content>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle>
+          Remove Visa
+        </DialogTitle>
+        <DialogContent>
+         <p>Do you want to remove this visa</p> 
+        </DialogContent>
+        <DialogActions
+        >
+          <button className='px-2 py-1 rounded-lg border-[1px] border-gray-900 hover:bg-gray-100' onClick={handleClose}>Cancel</button>
+          <button className='px-2 py-1 rounded-lg bg-[#D0021B] text-white hover:bg-red-700' onClick={handleRemove}>Remove</button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

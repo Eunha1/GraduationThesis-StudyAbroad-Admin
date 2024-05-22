@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ImageDrop } from '../asset/images/icons';
 import { Modal, Fade } from '@mui/material';
-import { extractExtension } from '../utils/Convert';
-function UploadImage({ title, onImageUpload, labelName }) {
-  const [imageList, setImageList] = useState([]);
+import {
+  extractExtension,
+  extractExtensionFromURL,
+  extractOriginalFilename,
+} from '../utils/Convert';
+function UpdateImage({ title, onImageUpload, labelName, listImages }) {
+  const [imageList, setImageList] = useState([...listImages]);
   const [open, setOpen] = useState(false);
   const [imageURL, setImageURL] = useState('');
   const handleImage = (event) => {
@@ -18,10 +22,19 @@ function UploadImage({ title, onImageUpload, labelName }) {
     setImageList(newImageList);
   };
   const handleView = (item) => {
-    const url = URL.createObjectURL(item.file);
+    let url;
+    if (item.file) {
+      url = URL.createObjectURL(item.file);
+    } else {
+      url = item;
+    }
     setImageURL(url);
     setOpen(true);
   };
+  useEffect(() => {
+    onImageUpload(listImages);
+    // eslint-disable-next-line
+  }, []);
   return (
     <div>
       <div className="col-span-1 grid grid-cols-6">
@@ -70,7 +83,27 @@ function UploadImage({ title, onImageUpload, labelName }) {
                       </div>
                     </div>
                   ) : (
-                    <></>
+                    <div className="flex">
+                      <div className="h-[30px] min-w-[300px] border-[1px] border-gray-800 rounded  mb-4 mr-4 cursor-pointer bg-[#E9F0FF]">
+                        <div
+                          className="text-black font-Roboto font-medium text-[14px] flex items-center px-2 h-full uppercase"
+                          onClick={() => handleView(item)}
+                        >
+                          <div className="h-[20px] w-[50px] bg-blue-600 border-[1px] text-white text-sm rounded text-center">
+                            {extractExtensionFromURL(item)}
+                          </div>
+                          <p className="ml-[20px]">
+                            {extractOriginalFilename(item)}
+                          </p>
+                        </div>
+                      </div>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => handleDropImage(index)}
+                      >
+                        <ImageDrop />
+                      </div>
+                    </div>
                   )}
                 </div>
               ))
@@ -96,4 +129,4 @@ function UploadImage({ title, onImageUpload, labelName }) {
   );
 }
 
-export default UploadImage;
+export default UpdateImage;

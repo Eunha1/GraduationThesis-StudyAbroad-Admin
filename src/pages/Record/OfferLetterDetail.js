@@ -7,8 +7,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ViewIcon, PencilIcon, DeleteIcon } from '../../asset/images/icons';
 import { ADMIN, ADMISSION_OFFICER, EDU_COUNSELLOR } from '../../utils/Constant';
 import { toast } from 'react-toastify';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 function OfferLetterRecordDetail() {
   const [items, setItem] = useState();
+  const [open, setOpen] = useState(false)
+  const [idOffer, setIdOffer] = useState()
   const title = 'Thư mời';
   const listBreadcrumb = [
     {
@@ -56,10 +59,15 @@ function OfferLetterRecordDetail() {
   const handleView = (id) => {
     navigate(`/record/offer-letter/${id}`);
   };
-  const handleEdit = (id) => {};
-  const handleDelete = async (id) => {
+  const handleEdit = (id) => {
+    navigate(`/record/update-offer-letter/${id}`);
+  };
+  const handleClose = ()=>{
+    setOpen(false)  
+  }
+  const handleRemove = async ()=>{
     const data = await postRequest(
-      `/api/file/delete/offer-letter-record/${id}`,
+      `/api/file/delete/offer-letter-record/${idOffer}`,
     );
     if (data.status === 1) {
       toast.success(data.message);
@@ -67,6 +75,11 @@ function OfferLetterRecordDetail() {
     } else {
       toast.error(data.message);
     }
+    setOpen(false) 
+  }
+  const handleDelete =  (id) => {
+    setOpen(true)
+    setIdOffer(id)
   };
   const action = [
     {
@@ -102,6 +115,22 @@ function OfferLetterRecordDetail() {
       <Content>
         <BaseTable headers={headers} items={items} actions={action}></BaseTable>
       </Content>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle>
+          Remove Offer Letter
+        </DialogTitle>
+        <DialogContent>
+         <p>Do you want to remove this offer letter</p> 
+        </DialogContent>
+        <DialogActions
+        >
+          <button className='px-2 py-1 rounded-lg border-[1px] border-gray-900 hover:bg-gray-100' onClick={handleClose}>Cancel</button>
+          <button className='px-2 py-1 rounded-lg bg-[#D0021B] text-white hover:bg-red-700' onClick={handleRemove}>Remove</button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

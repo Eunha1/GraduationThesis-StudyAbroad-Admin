@@ -30,7 +30,7 @@ export const Menu = [
       {
         title: 'Hồ sơ thư mời',
         src: '/offer-letter-file',
-        key: 'offer-letter',
+        key: 'offer-letter-file',
         isActive: false,
         icon: <AttachFile />,
       },
@@ -86,14 +86,14 @@ export const Menu = [
       {
         title: 'Thư mời',
         src: '/record/offer-letter',
-        key: 'offer-letter',
+        key: 'record-offer-letter',
         isActive: false,
         icon: <AttachFile />,
       },
       {
         title: 'Visa',
         src: '/record/visa',
-        key: 'visa',
+        key: 'record-visa',
         isActive: false,
         icon: <AttachFile />,
       },

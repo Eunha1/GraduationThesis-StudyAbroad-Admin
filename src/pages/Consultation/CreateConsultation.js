@@ -210,7 +210,8 @@ function CreateConsultation() {
                 label="Choose status"
                 placeholder="Choose status"
                 size="small"
-                value={formik.values.id}
+                defaultValue=""
+                value={formik.values.status}
                 onChange={(event) =>
                   formik.setFieldValue('status', event.target.value)
                 }

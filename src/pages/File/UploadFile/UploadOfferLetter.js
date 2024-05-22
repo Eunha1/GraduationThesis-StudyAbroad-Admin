@@ -2,13 +2,12 @@ import { Box, MenuItem, TextField } from '@mui/material';
 import Breadcrumb from '../../../components/Breadcrumb';
 import Content from '../../../components/Content';
 import { useState } from 'react';
-import { ImageDrop } from '../../../asset/images/icons';
-import { Fade, Modal } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { postRequest } from '../../../services/Api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import UploadImage from '../../../components/UploadImage';
 function UploadOfferLetterFile() {
   const [certificate, setCertificate] = useState([]);
   const [transcript, setTranscript] = useState([]);
@@ -17,8 +16,6 @@ function UploadOfferLetterFile() {
   );
   const [englishCertificate, setEnglishCertificate] = useState([]);
   const [motivationLetter, setMotivationLetter] = useState([]);
-  const [imageURL, setImageURL] = useState('');
-  const [open, setOpen] = useState(false);
   const title = 'Thêm hồ sơ thư mời';
   const listBreadcrumb = [
     {
@@ -38,57 +35,23 @@ function UploadOfferLetterFile() {
   const validationSchema = yup.object({
     phone: yup.string('Enter your phone').required('Phone is required'),
     school: yup.string('Enter school name').required('School is required'),
+    country: yup.string('Enter country').required('Enter country'),
+    status: yup.string('Choose status').required('Status is required'),
   });
-  const handleCertificate = (event) => {
-    setCertificate([...certificate, { file: event.target.files[0] }]);
+  const handleCertificate = (newImageList) => {
+    setCertificate(newImageList);
   };
-  const handleTranscript = (event) => {
-    setTranscript([...transcript, { file: event.target.files[0] }]);
+  const handleTranscript = (newImageList) => {
+    setTranscript(newImageList);
   };
-  const handleCCCD = (event) => {
-    setCitizenIdentificationCard([
-      ...citizenIdentificationCard,
-      { file: event.target.files[0] },
-    ]);
+  const handleCCCD = (newImageList) => {
+    setCitizenIdentificationCard(newImageList);
   };
-  const handleEnglishCertificate = (event) => {
-    setEnglishCertificate([
-      ...englishCertificate,
-      { file: event.target.files[0] },
-    ]);
+  const handleEnglishCertificate = (newImageList) => {
+    setEnglishCertificate(newImageList);
   };
-  const handleMotivationLetter = (event) => {
-    setMotivationLetter([...motivationLetter, { file: event.target.files[0] }]);
-  };
-  const handleDropCertficate = (index, [...listImage]) => {
-    const newCertificate = [...listImage];
-    newCertificate.splice(index, 1);
-    setCertificate(newCertificate);
-  };
-  const handleDropTranscript = (index, [...listImage]) => {
-    const newTranscript = [...listImage];
-    newTranscript.splice(index, 1);
-    setTranscript(newTranscript);
-  };
-  const handleDropCCCD = (index, [...listImage]) => {
-    const newCCCD = [...listImage];
-    newCCCD.splice(index, 1);
-    setCitizenIdentificationCard(newCCCD);
-  };
-  const handleDropEnglishCertificate = (index, [...listImage]) => {
-    const newEnglishCertificate = [...listImage];
-    newEnglishCertificate.splice(index, 1);
-    setEnglishCertificate(newEnglishCertificate);
-  };
-  const handleDropMotivationLetter = (index, [...listImage]) => {
-    const newMotivationLetter = [...listImage];
-    newMotivationLetter.splice(index, 1);
-    setMotivationLetter(newMotivationLetter);
-  };
-  const handleView = (file) => {
-    const url = URL.createObjectURL(file.file);
-    setImageURL(url);
-    setOpen(true);
+  const handleMotivationLetter = (newImageList) => {
+    setMotivationLetter(newImageList);
   };
   const navigate = useNavigate();
   const listStatus = [
@@ -101,15 +64,16 @@ function UploadOfferLetterFile() {
     initialValues: {
       phone: '',
       school: '',
+      country: '',
       status: '',
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values.status);
       const formData = new FormData();
       formData.append('customer_phone', values.phone);
       formData.append('school_name', values.school);
       formData.append('status', values.status);
+      formData.append('country', values.country);
       certificate.forEach((element) => {
         formData.append(`certificate`, element.file);
       });
@@ -138,14 +102,17 @@ function UploadOfferLetterFile() {
       }
     },
   });
+  const handleCancel = () => {
+    navigate('/offer-letter-file');
+  };
   return (
     <div>
       <Breadcrumb title={title} listBreadcrumb={listBreadcrumb} />
       <Content>
         <Box component="form" onSubmit={formik.handleSubmit}>
-          <div className="grid grid-cols-3">
-            <div className="flex items-center my-5 col-span-1">
-              <label htmlFor="phone" className="mr-3">
+          <div className="grid grid-cols-4 gap-[30px]">
+            <div className="flex flex-col my-5 col-span-1">
+              <label htmlFor="phone" className="mb-2">
                 Số điện thoại
               </label>
               <TextField
@@ -161,8 +128,8 @@ function UploadOfferLetterFile() {
                 helperText={formik.touched.phone && formik.errors.phone}
               />
             </div>
-            <div className="flex items-center my-5 col-span-1">
-              <label htmlFor="school" className="mr-3">
+            <div className="flex flex-col my-5 col-span-1">
+              <label htmlFor="school" className="mb-2">
                 Trường gửi hồ sơ
               </label>
               <TextField
@@ -178,8 +145,25 @@ function UploadOfferLetterFile() {
                 helperText={formik.touched.school && formik.errors.school}
               />
             </div>
-            <div className="flex items-center my-5 col-span-1">
-              <label htmlFor="status" className="mr-3">
+            <div className="flex flex-col my-5 col-span-1">
+              <label htmlFor="country" className="mb-2">
+                Quốc gia
+              </label>
+              <TextField
+                type="text"
+                name="country"
+                variant="outlined"
+                label="Enter country"
+                placeholder="Enter country"
+                size="small"
+                value={formik.values.country}
+                onChange={formik.handleChange}
+                error={formik.touched.country && Boolean(formik.errors.country)}
+                helperText={formik.touched.country && formik.errors.country}
+              />
+            </div>
+            <div className="flex flex-col my-5 col-span-1">
+              <label htmlFor="status" className="mb-2">
                 Status
               </label>
               <TextField
@@ -187,10 +171,12 @@ function UploadOfferLetterFile() {
                 fullWidth
                 placeholder="Choose status"
                 size="small"
-                value={formik.values.id}
+                value={formik.values.status}
                 onChange={(event) =>
                   formik.setFieldValue('status', event.target.value)
                 }
+                error={formik.touched.status && Boolean(formik.errors.status)}
+                helperText={formik.touched.status && formik.errors.status}
               >
                 {listStatus.map((option, index) => (
                   <MenuItem key={index} value={option.id}>
@@ -200,301 +186,33 @@ function UploadOfferLetterFile() {
               </TextField>
             </div>
           </div>
-          <div className="grid grid-cols-2">
-            <div className="col-span-1 grid grid-cols-6">
-              <label className="mr-5 font-bold mt-5 col-span-2">
-                Bằng tốt nghiệp
-              </label>
-              <div className="flex my-5 col-span-3">
-                <div className="w-[80px]">
-                  <label htmlFor="certificate" className="cursor-pointer">
-                    <div className="relative ">
-                      <div className="py-[1px] px-1 border-[0.5px] border-gray-500 text-center rounded-md">
-                        Chọn tệp
-                      </div>
-                      <input
-                        type="file"
-                        id="certificate"
-                        accept="image/*"
-                        multiple
-                        onChange={(event) => handleCertificate(event)}
-                        className="absolute z-[-1] opacity-0"
-                      />
-                    </div>
-                  </label>
-                </div>
-                <div className="ml-[30px]">
-                  {[...certificate].length > 0 ? (
-                    [...certificate].map((item, index) => (
-                      <div key={index}>
-                        {item.file?.name ? (
-                          <div className="flex">
-                            <div className="h-[30px] w-[250px] border-[1px] border-gray-800 rounded shadow-xl shadow-gray-200 bg-gray-50 mb-4 mr-4 cursor-pointer">
-                              <div
-                                className="text-black font-Roboto text-[14px] italic flex items-center px-4 h-full"
-                                onClick={() => handleView(item)}
-                              >
-                                {item.file.name}
-                              </div>
-                            </div>
-                            <div
-                              className="cursor-pointer"
-                              onClick={() =>
-                                handleDropCertficate(index, [...certificate])
-                              }
-                            >
-                              <ImageDrop />
-                            </div>
-                          </div>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-red-500">Please choose your image</div>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="col-span-1 grid grid-cols-6">
-              <label className="mr-5 font-bold mt-5 col-span-2">
-                Bảng điểm
-              </label>
-              <div className="flex my-5 col-span-3">
-                <div className="w-[80px]">
-                  <label htmlFor="transcript" className="cursor-pointer">
-                    <div className="relative ">
-                      <div className="py-[1px] px-1 border-[0.5px] border-gray-500 text-center rounded-md">
-                        Chọn tệp
-                      </div>
-                      <input
-                        type="file"
-                        id="transcript"
-                        accept="image/*"
-                        multiple
-                        onChange={(event) => handleTranscript(event)}
-                        className="absolute z-[-1] opacity-0"
-                      />
-                    </div>
-                  </label>
-                </div>
-                <div className="ml-[30px]">
-                  {[...transcript].length > 0 ? (
-                    [...transcript].map((item, index) => (
-                      <div key={index}>
-                        {item.file?.name ? (
-                          <div className="flex">
-                            <div className="h-[30px] w-[250px] border-[1px] border-gray-800 rounded shadow-xl shadow-gray-200 bg-gray-50 mb-4 mr-4 cursor-pointer">
-                              <div
-                                className="text-black font-Roboto text-[14px] italic flex items-center px-4 h-full"
-                                onClick={() => handleView(item)}
-                              >
-                                {item.file.name}
-                              </div>
-                            </div>
-                            <div
-                              className="cursor-pointer"
-                              onClick={() =>
-                                handleDropTranscript(index, [...transcript])
-                              }
-                            >
-                              <ImageDrop />
-                            </div>
-                          </div>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-red-500">Please choose your image</div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-2">
-            <div className="col-span-1 grid grid-cols-6 ">
-              <label className="mr-5 font-bold mt-5 col-span-2">
-                Căn cước công dân
-              </label>
-              <div className="flex my-5 col-span-3">
-                <div className="w-[80px]">
-                  <label htmlFor="cccd" className="cursor-pointer">
-                    <div className="relative ">
-                      <div className="py-[1px] px-1 border-[0.5px] border-gray-500 text-center rounded-md">
-                        Chọn tệp
-                      </div>
-                      <input
-                        type="file"
-                        id="cccd"
-                        accept="image/*"
-                        multiple
-                        onChange={(event) => handleCCCD(event)}
-                        className="absolute z-[-1] opacity-0"
-                      />
-                    </div>
-                  </label>
-                </div>
-                <div className="ml-[30px]">
-                  {[...citizenIdentificationCard].length > 0 ? (
-                    [...citizenIdentificationCard].map((item, index) => (
-                      <div key={index}>
-                        {item.file?.name ? (
-                          <div className="flex">
-                            <div className="h-[30px] w-[250px] border-[1px] border-gray-800 rounded shadow-xl shadow-gray-200 bg-gray-50 mb-4 mr-4 cursor-pointer">
-                              <div
-                                className="text-black font-Roboto text-[14px] italic flex items-center px-4 h-full"
-                                onClick={() => handleView(item)}
-                              >
-                                {item.file.name}
-                              </div>
-                            </div>
-                            <div
-                              className="cursor-pointer"
-                              onClick={() =>
-                                handleDropCCCD(index, [
-                                  ...citizenIdentificationCard,
-                                ])
-                              }
-                            >
-                              <ImageDrop />
-                            </div>
-                          </div>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-red-500">Please choose your image</div>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="col-span-1 grid grid-cols-6">
-              <label className="mr-5 font-bold mt-5 col-span-2">
-                Chứng chỉ tiếng anh
-              </label>
-              <div className="flex my-5 col-span-3">
-                <div className="w-[80px]">
-                  <label
-                    htmlFor="english-certificate"
-                    className="cursor-pointer"
-                  >
-                    <div className="relative ">
-                      <div className="py-[1px] px-1 border-[0.5px] border-gray-500 text-center rounded-md">
-                        Chọn tệp
-                      </div>
-                      <input
-                        type="file"
-                        id="english-certificate"
-                        accept="image/*"
-                        multiple
-                        onChange={(event) => handleEnglishCertificate(event)}
-                        className="absolute z-[-1] opacity-0"
-                      />
-                    </div>
-                  </label>
-                </div>
-                <div className="ml-[30px]">
-                  {[...englishCertificate].length > 0 ? (
-                    [...englishCertificate].map((item, index) => (
-                      <div key={index}>
-                        {item.file?.name ? (
-                          <div className="flex">
-                            <div className="h-[30px] w-[250px] border-[1px] border-gray-800 rounded shadow-xl shadow-gray-200 bg-gray-50 mb-4 mr-4 cursor-pointer">
-                              <div
-                                className="text-black font-Roboto text-[14px] italic flex items-center px-4 h-full"
-                                onClick={() => handleView(item)}
-                              >
-                                {item.file.name}
-                              </div>
-                            </div>
-                            <div
-                              className="cursor-pointer"
-                              onClick={() =>
-                                handleDropEnglishCertificate(index, [
-                                  ...englishCertificate,
-                                ])
-                              }
-                            >
-                              <ImageDrop />
-                            </div>
-                          </div>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-red-500">Please choose your image</div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-span-1 grid grid-cols-6">
-            <label className="mr-5 font-bold mt-5 col-span-1">
-              Thư động lực
-            </label>
-            <div className="flex my-5 col-span-3">
-              <div className="w-[80px]">
-                <label htmlFor="motivation-letter" className="cursor-pointer">
-                  <div className="relative ">
-                    <div className="py-[1px] px-1 border-[0.5px] border-gray-500 text-center rounded-md">
-                      Chọn tệp
-                    </div>
-                    <input
-                      type="file"
-                      id="motivation-letter"
-                      accept="image/*"
-                      multiple
-                      onChange={(event) => handleMotivationLetter(event)}
-                      className="absolute z-[-1] opacity-0"
-                    />
-                  </div>
-                </label>
-              </div>
-              <div className="ml-[30px]">
-                {[...motivationLetter].length > 0 ? (
-                  [...motivationLetter].map((item, index) => (
-                    <div key={index}>
-                      {item.file?.name ? (
-                        <div className="flex">
-                          <div className="h-[30px] w-[250px] border-[1px] border-gray-800 rounded shadow-xl shadow-gray-200 bg-gray-50 mb-4 mr-4 cursor-pointer">
-                            <div
-                              className="text-black font-Roboto text-[14px] italic flex items-center px-4 h-full"
-                              onClick={() => handleView(item)}
-                            >
-                              {item.file.name}
-                            </div>
-                          </div>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() =>
-                              handleDropMotivationLetter(index, [
-                                ...motivationLetter,
-                              ])
-                            }
-                          >
-                            <ImageDrop />
-                          </div>
-                        </div>
-                      ) : (
-                        <></>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-red-500">Please choose your image</div>
-                )}
-              </div>
-            </div>
-          </div>
+          <UploadImage
+            title="Bằng tốt nghiệp"
+            onImageUpload={handleCertificate}
+            labelName="certificate"
+          />
+          <UploadImage
+            title="Bảng điểm"
+            onImageUpload={handleTranscript}
+            labelName="transcript"
+          />
+          <UploadImage
+            title="Căn cước công dân"
+            onImageUpload={handleCCCD}
+            labelName="CCCD"
+          />
+          <UploadImage
+            title="Chứng chỉ tiếng anh"
+            onImageUpload={handleEnglishCertificate}
+            labelName="EnglisdCertificate"
+          />
+          <UploadImage
+            title="Thư động lực"
+            onImageUpload={handleMotivationLetter}
+            labelName="motivationLetter"
+          />
           <div className="mt-5 grid grid-cols-6">
-            <label htmlFor="note" className="font-bold col-span-1">
+            <label htmlFor="note" className="font-medium font-Inter col-span-1">
               Ghi chú
             </label>
             <div className="col-span-5">
@@ -510,26 +228,21 @@ function UploadOfferLetterFile() {
               />
             </div>
           </div>
-
-          <div>
-            <Modal
-              className="flex items-center justify-center"
-              open={open}
-              onClose={() => setOpen(false)}
-            >
-              <Fade in={open} timeout={500} className="outline-none">
-                {/* eslint-disable-next-line */}
-                <img src={imageURL} alt="image" />
-              </Fade>
-            </Modal>
-          </div>
-          <div>
-            <button
-              className="border-[1px] border-gray-800 px-3 rounded-md"
-              type="submit"
-            >
-              Save
-            </button>
+          <div className="border-t border-gray-700 mt-[50px]">
+            <div className="mt-8 flex justify-end items-center">
+              <button
+                className=" font-medium rounded-lg text-lg px-2 py-1 w-[70px] text-center border-[1px] border-gray-900 mr-5"
+                onClick={handleCancel}
+              >
+                Cancel
+              </button>
+              <button
+                className=" text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-lg px-3 py-1 w-[70px] text-center"
+                type="submit"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </Box>
       </Content>

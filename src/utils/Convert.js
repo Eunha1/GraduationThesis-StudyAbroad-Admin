@@ -10,6 +10,18 @@ export const extractOriginalFilename = (url) => {
   const originalFilename = filename.split('-')[1];
   return originalFilename;
 };
+export const extractExtension = (fileName) => {
+  const extension = fileName.split('.').pop();
+  return extension;
+};
+
+export const extractExtensionFromURL = (url) => {
+  const parts = url.split('/');
+  const filename = parts[parts.length - 1];
+  const originalFilename = filename.split('-')[1];
+  const extension = originalFilename.split('.').pop();
+  return extension;
+};
 export const extractTimestampAndConvertToDate = (url) => {
   // get image name
   const imageName = extractFilename(url);
@@ -41,4 +53,10 @@ export const convertDate = (time) => {
   const seconds = date.getSeconds();
 
   return `${day}/${month}/${year}-${hours}:${minutes}:${seconds}`;
+};
+
+export const extractPathNameFromURL = (url) => {
+  const parseURL = new URL(url);
+
+  return parseURL.pathname.slice(1);
 };

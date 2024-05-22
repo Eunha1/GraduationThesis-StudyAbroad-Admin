@@ -24,6 +24,11 @@ import Consultation from '../pages/Consultation/Consultation';
 import ConsultationDetail from '../pages/Consultation/ConsultationDetail';
 import CreateConsultation from '../pages/Consultation/CreateConsultation';
 import UpdateConsultation from '../pages/Consultation/UpdateConsultation';
+import UpdateOfferLetterFile from '../pages/File/UpdateFile/OfferLetter';
+import UpdateVisaFile from '../pages/File/UpdateFile/Visa';
+import UpdateOfferLetter from '../pages/Record/UpdateOfferLetter';
+import UpdateVisa from '../pages/Record/UpdateVisa';
+import EditArticle from '../pages/Article/EditArticle';
 export const PRIVATE_ROUTER = [
   {
     key: 'home',
@@ -42,6 +47,12 @@ export const PRIVATE_ROUTER = [
     key: 'add-article',
     path: '/article/add-article',
     element: <AddArticle />,
+    role: [ADMIN],
+  },
+  {
+    key: 'update-article',
+    path: '/article/update/:article_id',
+    element: <EditArticle />,
     role: [ADMIN],
   },
   { key: 'assign', path: '/assign', element: <Assign />, role: [ADMIN] },
@@ -152,6 +163,30 @@ export const PRIVATE_ROUTER = [
     path: '/consultation/update/:consultation_id',
     element: <UpdateConsultation />,
     role: [EDU_COUNSELLOR],
+  },
+  {
+    key: 'update-offerLetter-file',
+    path: '/offer-letter/update-file/:file_id',
+    element: <UpdateOfferLetterFile />,
+    role: [EDU_COUNSELLOR, ADMISSION_OFFICER],
+  },
+  {
+    key: 'update-visa-file',
+    path: '/visa/update-file/:file_id',
+    element: <UpdateVisaFile />,
+    role: [EDU_COUNSELLOR, ADMISSION_OFFICER],
+  },
+  {
+    key: 'update-offer-letter',
+    path: '/record/update-offer-letter/:offer_letter_id',
+    element: <UpdateOfferLetter />,
+    role: [EDU_COUNSELLOR, ADMISSION_OFFICER],
+  },
+  {
+    key: 'update-visa',
+    path: '/record/update-visa/:visa_id',
+    element: <UpdateVisa />,
+    role: [EDU_COUNSELLOR, ADMISSION_OFFICER],
   },
 ];
 

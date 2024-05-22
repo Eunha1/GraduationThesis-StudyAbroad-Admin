@@ -7,8 +7,12 @@ import { getRequest, postRequest } from '../../services/Api';
 import { useEffect, useState } from 'react';
 import { ADMIN, ADMISSION_OFFICER, EDU_COUNSELLOR } from '../../utils/Constant';
 import { toast } from 'react-toastify';
+import { checkRoles } from '../../utils/Authen';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 function OfferLetter() {
   const [items, setItem] = useState();
+  const [open, setOpen] = useState(false)
+  const [idOffer, setIdOffer] = useState()
   const title = 'Hồ sơ thư mời';
   const listBreadcrumb = [
     {
@@ -62,15 +66,25 @@ function OfferLetter() {
   const handleView = (id) => {
     navigate(`/offer-letter/${id}`);
   };
-  const handleEdit = (id) => {};
-  const handleDelete = async (id) => {
-    const data = await postRequest(`/api/file/delete/offer-letter-file/${id}`);
+  const handleEdit = (id) => {
+    navigate(`/offer-letter/update-file/${id}`);
+  };
+  const handleClose = ()=>{
+    setOpen(false)  
+  }
+  const handleRemove = async ()=>{
+    const data = await postRequest(`/api/file/delete/offer-letter-file/${idOffer}`);
     if (data.status === 1) {
       toast.success(data.message);
       getListOfferLetter();
     } else {
       toast.error(data.message);
     }
+    setOpen(false)
+  }
+  const handleDelete = (id) => {
+    setOpen(true)
+    setIdOffer(id)
   };
   const action = [
     {
@@ -95,17 +109,37 @@ function OfferLetter() {
   return (
     <div>
       <Breadcrumb title={title} listBreadcrumb={listBreadcrumb} />
-      <button className="border rounded-lg bg-[#015289] my-4 p-1 px-3 flex justify-center ">
-        <Link
-          to="/offer-letter/upload"
-          className="text-white text-base font-Roboto"
-        >
-          Thêm
-        </Link>
-      </button>
+      {checkRoles([ADMIN]) ? (
+        <></>
+      ) : (
+        <button className="border rounded-lg bg-[#015289] my-4 p-1 px-3 flex justify-center ">
+          <Link
+            to="/offer-letter/upload"
+            className="text-white text-base font-Roboto"
+          >
+            Thêm
+          </Link>
+        </button>
+      )}
       <Content>
         <BaseTable headers={headers} items={items} actions={action}></BaseTable>
       </Content>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle>
+          Remove file
+        </DialogTitle>
+        <DialogContent>
+         <p>Do you want to remove this file</p> 
+        </DialogContent>
+        <DialogActions
+        >
+          <button className='px-2 py-1 rounded-lg border-[1px] border-gray-900 hover:bg-gray-100' onClick={handleClose}>Cancel</button>
+          <button className='px-2 py-1 rounded-lg bg-[#D0021B] text-white hover:bg-red-700' onClick={handleRemove}>Remove</button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
