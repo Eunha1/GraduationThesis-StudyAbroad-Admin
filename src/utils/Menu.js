@@ -8,7 +8,12 @@ import {
   PaidOutlined,
 } from '@mui/icons-material';
 import { ADMIN, ADMISSION_OFFICER, EDU_COUNSELLOR } from './Constant';
-import { NoteIcon, UploadIcon2 } from '../asset/images/icons';
+import {
+  CategoryIcon,
+  NoteIcon,
+  PostIcon,
+  UploadIcon2,
+} from '../asset/images/icons';
 
 export const Menu = [
   {
@@ -45,11 +50,27 @@ export const Menu = [
   },
   {
     title: 'Quản lý bài viết',
-    src: '/article',
+    src: '/',
     key: 'article',
     icon: <ArticleOutlined />,
     isActive: false,
     role: [ADMIN],
+    child: [
+      {
+        title: 'Danh mục',
+        src: '/category',
+        key: 'category',
+        icon: <CategoryIcon />,
+        isActive: false,
+      },
+      {
+        title: 'Bài viết',
+        src: '/article',
+        key: 'article-manager',
+        icon: <PostIcon />,
+        isActive: false,
+      },
+    ],
   },
   {
     title: 'Quản lý công việc',

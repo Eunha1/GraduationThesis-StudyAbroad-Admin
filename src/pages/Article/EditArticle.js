@@ -39,7 +39,7 @@ function EditArticle() {
       title: 'Chỉnh sửa bài viết',
     },
   ];
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const validationSchema = yup.object({
     title: yup.string('Enter title').required('Title is required'),
     description: yup
@@ -55,25 +55,28 @@ function EditArticle() {
       content: '',
     },
     validationSchema: validationSchema,
-    onSubmit: async  (values) => {
-        const formData = new FormData()
-        formData.append('title',values.title)
-        formData.append('author',values.author)
-        formData.append('category',values.category.toString())
-        formData.append('description',values.description)
-        formData.append('content',content)
-        if(image.name){
-            formData.append('image',image)
-        }else{
-            formData.append('image',extractPathNameFromURL(image))
-        }
-        const data = await postRequest(`/api/update-post/${article_id}`,formData)
-        if(data.status === 1){
-            toast.success(data.message)
-            navigate('/article')
-        }else{
-            toast.error(data.message)
-        }
+    onSubmit: async (values) => {
+      const formData = new FormData();
+      formData.append('title', values.title);
+      formData.append('author', values.author);
+      formData.append('category', values.category);
+      formData.append('description', values.description);
+      formData.append('content', content);
+      if (image.name) {
+        formData.append('image', image);
+      } else {
+        formData.append('image', extractPathNameFromURL(image));
+      }
+      const data = await postRequest(
+        `/api/update-post/${article_id}`,
+        formData,
+      );
+      if (data.status === 1) {
+        toast.success(data.message);
+        navigate('/article');
+      } else {
+        toast.error(data.message);
+      }
     },
   });
   useEffect(() => {
@@ -86,8 +89,12 @@ function EditArticle() {
     formik.setFieldValue('title', data.data.title);
     formik.setFieldValue('author', data.data.author);
     formik.setFieldValue('description', data.data.description);
-    formik.setFieldValue('category', data.data.category.split(','));
     formik.setFieldValue('content', data.data.content);
+    let category = []
+    for(const item of data.data.category){
+      category.push(item._id)
+    }
+    formik.setFieldValue('category', category);
     setData(data.data);
   };
   useEffect(() => {
@@ -104,15 +111,15 @@ function EditArticle() {
   const handleImage = (newImage) => {
     setImage(newImage);
   };
-  const handleCancel = ()=>{
-    navigate('/article')
-  }
+  const handleCancel = () => {
+    navigate('/article');
+  };
   return (
     <div>
       <Breadcrumb title={title} listBreadcrumb={listBreadcrumb} />
       <Content>
         {data ? (
-          <Box component='form' onSubmit={formik.handleSubmit}>
+          <Box component="form" onSubmit={formik.handleSubmit}>
             <div className="grid grid-cols-8 p-3">
               <label className="col-span-1">Title</label>
               <TextField
@@ -169,7 +176,7 @@ function EditArticle() {
                 >
                   {listCategory ? (
                     listCategory.map((option, index) => (
-                      <MenuItem key={index} value={option.category}>
+                      <MenuItem key={index} value={option._id}>
                         {option.category}
                       </MenuItem>
                     ))
@@ -215,21 +222,21 @@ function EditArticle() {
               </div>
             </div>
             <div className="border-t border-gray-700 mt-[50px]">
-            <div className="mt-8 flex justify-end items-center">
-              <button
-                className=" font-medium rounded-lg text-lg px-2 py-1 w-[70px] text-center border-[1px] border-gray-900 mr-5"
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-              <button
-                className=" text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-lg px-3 py-1 w-[70px] text-center"
-                type="submit"
-              >
-                Save
-              </button>
+              <div className="mt-8 flex justify-end items-center">
+                <button
+                  className=" font-medium rounded-lg text-lg px-2 py-1 w-[70px] text-center border-[1px] border-gray-900 mr-5"
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </button>
+                <button
+                  className=" text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-lg px-3 py-1 w-[70px] text-center"
+                  type="submit"
+                >
+                  Save
+                </button>
+              </div>
             </div>
-          </div>
           </Box>
         ) : (
           <div>Loading</div>

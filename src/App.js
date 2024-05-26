@@ -48,7 +48,6 @@ function App() {
         closeOnClick
         rtl={false}
         draggable
-        pauseOnHover
         theme="colored"
       />
     </BrowserRouter>

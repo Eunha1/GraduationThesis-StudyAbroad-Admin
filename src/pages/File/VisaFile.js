@@ -8,11 +8,12 @@ import { getRequest, postRequest } from '../../services/Api';
 import { ADMIN, ADMISSION_OFFICER, EDU_COUNSELLOR } from '../../utils/Constant';
 import { toast } from 'react-toastify';
 import { checkRoles } from '../../utils/Authen';
-import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { EventEmitter } from 'events';
+import BaseConfirmDialog from '../../components/BaseConfirmDialog';
 function VisaFile() {
   const [items, setItem] = useState();
-  const [open, setOpen] = useState(false)
-  const [idVisa, setIdVisa] = useState()
+  const [open, setOpen] = useState(false);
+  const [idVisa, setIdVisa] = useState();
   const title = 'Hồ sơ Visa';
   const listBreadcrumb = [
     {
@@ -55,6 +56,7 @@ function VisaFile() {
       title: 'Action',
     },
   ];
+  const event = new EventEmitter();
   useEffect(() => {
     getVisaFile();
   }, []);
@@ -69,10 +71,7 @@ function VisaFile() {
   const handleEdit = (id) => {
     navigate(`/visa/update-file/${id}`);
   };
-  const handleClose = ()=>{
-    setOpen(false)  
-  }
-  const handleRemove = async () =>{
+  event.addListener('RemoveItem', async () => {
     const data = await postRequest(`/api/file/delete/visa-file/${idVisa}`);
     if (data.status === 1) {
       toast.success(data.message);
@@ -80,11 +79,10 @@ function VisaFile() {
     } else {
       toast.error(data.message);
     }
-    setOpen(false)
-  }
+  });
   const handleDelete = async (id) => {
-    setOpen(true)
-    setIdVisa(id)
+    setOpen(true);
+    setIdVisa(id);
   };
   const action = [
     {
@@ -124,22 +122,13 @@ function VisaFile() {
       <Content>
         <BaseTable headers={headers} items={items} actions={action}></BaseTable>
       </Content>
-      <Dialog
+      <BaseConfirmDialog
+        title="Remove file"
+        content="Do you want to remove this file"
         open={open}
-        onClose={handleClose}
-      >
-        <DialogTitle>
-          Remove file
-        </DialogTitle>
-        <DialogContent>
-         <p>Do you want to remove this file</p> 
-        </DialogContent>
-        <DialogActions
-        >
-          <button className='px-2 py-1 rounded-lg border-[1px] border-gray-900 hover:bg-gray-100' onClick={handleClose}>Cancel</button>
-          <button className='px-2 py-1 rounded-lg bg-[#D0021B] text-white hover:bg-red-700' onClick={handleRemove}>Remove</button>
-        </DialogActions>
-      </Dialog>
+        setOpen={setOpen}
+        event={event}
+      />
     </div>
   );
 }

@@ -7,11 +7,12 @@ import { ADMIN } from '../../utils/Constant';
 import { useEffect, useState } from 'react';
 import { getRequest, postRequest } from '../../services/Api';
 import { toast } from 'react-toastify';
-import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import BaseConfirmDialog from '../../components/BaseConfirmDialog';
+import { EventEmitter } from 'events';
 function Article() {
   const [item, setItem] = useState();
-  const [open, setOpen] = useState(false)
-  const [idArticle, setIdArticle] = useState()
+  const [open, setOpen] = useState(false);
+  const [idArticle, setIdArticle] = useState();
   const header = [
     {
       key: 'stt',
@@ -51,26 +52,23 @@ function Article() {
       title: 'Bài viết',
     },
   ];
+  const event = new EventEmitter();
   const navigate = useNavigate();
   const handleEdit = (id) => {
     navigate(`/article/update/${id}`);
   };
-  const handleClose = ()=>{
-    setOpen(false)
-  }
-  const handleRemove = async ()=>{
-      const data = await postRequest(`/api/delete-post/${idArticle}`);
-      if (data.status === 1) {
-        toast.success(data.message);
-        getListPost();
-      } else {
-        toast.error(data.message);
-      }
-    setOpen(false)
-  }
+  event.addListener('RemoveItem', async () => {
+    const data = await postRequest(`/api/delete-post/${idArticle}`);
+    if (data.status === 1) {
+      toast.success(data.message);
+      getListPost();
+    } else {
+      toast.error(data.message);
+    }
+  });
   const handleDelete = async (id) => {
-    setOpen(true)
-    setIdArticle(id)
+    setOpen(true);
+    setIdArticle(id);
   };
   const handleView = (id) => {};
   const action = [
@@ -116,22 +114,13 @@ function Article() {
       <Content>
         <BaseTable headers={header} items={item} actions={action}></BaseTable>
       </Content>
-      <Dialog
+      <BaseConfirmDialog
+        title="Remove article"
+        content="Do you want to remove this article"
         open={open}
-        onClose={handleClose}
-      >
-        <DialogTitle>
-          Remove article
-        </DialogTitle>
-        <DialogContent>
-         <p>Do you want to remove this article</p> 
-        </DialogContent>
-        <DialogActions
-        >
-          <button className='px-2 py-1 rounded-lg border-[1px] border-gray-900 hover:bg-gray-100' onClick={handleClose}>Cancel</button>
-          <button className='px-2 py-1 rounded-lg bg-[#D0021B] text-white hover:bg-red-700' onClick={handleRemove}>Remove</button>
-        </DialogActions>
-      </Dialog>
+        setOpen={setOpen}
+        event={event}
+      />
     </div>
   );
 }

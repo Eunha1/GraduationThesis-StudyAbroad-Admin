@@ -29,6 +29,7 @@ import UpdateVisaFile from '../pages/File/UpdateFile/Visa';
 import UpdateOfferLetter from '../pages/Record/UpdateOfferLetter';
 import UpdateVisa from '../pages/Record/UpdateVisa';
 import EditArticle from '../pages/Article/EditArticle';
+import Category from '../pages/Category/Category';
 export const PRIVATE_ROUTER = [
   {
     key: 'home',
@@ -187,6 +188,12 @@ export const PRIVATE_ROUTER = [
     path: '/record/update-visa/:visa_id',
     element: <UpdateVisa />,
     role: [EDU_COUNSELLOR, ADMISSION_OFFICER],
+  },
+  {
+    key: 'category',
+    path: '/category',
+    element: <Category />,
+    role: [ADMIN],
   },
 ];
 

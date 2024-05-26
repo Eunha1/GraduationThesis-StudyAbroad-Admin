@@ -8,11 +8,12 @@ import { useEffect, useState } from 'react';
 import { ADMIN, ADMISSION_OFFICER, EDU_COUNSELLOR } from '../../utils/Constant';
 import { toast } from 'react-toastify';
 import { checkRoles } from '../../utils/Authen';
-import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { EventEmitter } from 'events';
+import BaseConfirmDialog from '../../components/BaseConfirmDialog';
 function OfferLetter() {
   const [items, setItem] = useState();
-  const [open, setOpen] = useState(false)
-  const [idOffer, setIdOffer] = useState()
+  const [open, setOpen] = useState(false);
+  const [idOffer, setIdOffer] = useState();
   const title = 'Hồ sơ thư mời';
   const listBreadcrumb = [
     {
@@ -55,6 +56,7 @@ function OfferLetter() {
       title: 'Action',
     },
   ];
+  const event = new EventEmitter();
   useEffect(() => {
     getListOfferLetter();
   }, []);
@@ -69,22 +71,20 @@ function OfferLetter() {
   const handleEdit = (id) => {
     navigate(`/offer-letter/update-file/${id}`);
   };
-  const handleClose = ()=>{
-    setOpen(false)  
-  }
-  const handleRemove = async ()=>{
-    const data = await postRequest(`/api/file/delete/offer-letter-file/${idOffer}`);
+  event.addListener('RemoveItem', async () => {
+    const data = await postRequest(
+      `/api/file/delete/offer-letter-file/${idOffer}`,
+    );
     if (data.status === 1) {
       toast.success(data.message);
       getListOfferLetter();
     } else {
       toast.error(data.message);
     }
-    setOpen(false)
-  }
+  });
   const handleDelete = (id) => {
-    setOpen(true)
-    setIdOffer(id)
+    setOpen(true);
+    setIdOffer(id);
   };
   const action = [
     {
@@ -124,22 +124,13 @@ function OfferLetter() {
       <Content>
         <BaseTable headers={headers} items={items} actions={action}></BaseTable>
       </Content>
-      <Dialog
+      <BaseConfirmDialog
+        title="Remove file"
+        content="Do you want to remove this file"
         open={open}
-        onClose={handleClose}
-      >
-        <DialogTitle>
-          Remove file
-        </DialogTitle>
-        <DialogContent>
-         <p>Do you want to remove this file</p> 
-        </DialogContent>
-        <DialogActions
-        >
-          <button className='px-2 py-1 rounded-lg border-[1px] border-gray-900 hover:bg-gray-100' onClick={handleClose}>Cancel</button>
-          <button className='px-2 py-1 rounded-lg bg-[#D0021B] text-white hover:bg-red-700' onClick={handleRemove}>Remove</button>
-        </DialogActions>
-      </Dialog>
+        setOpen={setOpen}
+        event={event}
+      />
     </div>
   );
 }

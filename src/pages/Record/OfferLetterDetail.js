@@ -7,11 +7,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ViewIcon, PencilIcon, DeleteIcon } from '../../asset/images/icons';
 import { ADMIN, ADMISSION_OFFICER, EDU_COUNSELLOR } from '../../utils/Constant';
 import { toast } from 'react-toastify';
-import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { EventEmitter } from 'events';
+import BaseConfirmDialog from '../../components/BaseConfirmDialog';
 function OfferLetterRecordDetail() {
   const [items, setItem] = useState();
-  const [open, setOpen] = useState(false)
-  const [idOffer, setIdOffer] = useState()
+  const [open, setOpen] = useState(false);
+  const [idOffer, setIdOffer] = useState();
   const title = 'Thư mời';
   const listBreadcrumb = [
     {
@@ -46,6 +47,7 @@ function OfferLetterRecordDetail() {
       title: 'Action',
     },
   ];
+  const event = new EventEmitter();
   useEffect(() => {
     getListRecordOfferLetter();
   }, []);
@@ -62,10 +64,7 @@ function OfferLetterRecordDetail() {
   const handleEdit = (id) => {
     navigate(`/record/update-offer-letter/${id}`);
   };
-  const handleClose = ()=>{
-    setOpen(false)  
-  }
-  const handleRemove = async ()=>{
+  event.addListener('RemoveItem', async () => {
     const data = await postRequest(
       `/api/file/delete/offer-letter-record/${idOffer}`,
     );
@@ -75,11 +74,11 @@ function OfferLetterRecordDetail() {
     } else {
       toast.error(data.message);
     }
-    setOpen(false) 
-  }
-  const handleDelete =  (id) => {
-    setOpen(true)
-    setIdOffer(id)
+    setOpen(false);
+  });
+  const handleDelete = (id) => {
+    setOpen(true);
+    setIdOffer(id);
   };
   const action = [
     {
@@ -115,22 +114,13 @@ function OfferLetterRecordDetail() {
       <Content>
         <BaseTable headers={headers} items={items} actions={action}></BaseTable>
       </Content>
-      <Dialog
+      <BaseConfirmDialog
+        title="Remove Offer Letter"
+        content="Do you want to remove this offer letter"
         open={open}
-        onClose={handleClose}
-      >
-        <DialogTitle>
-          Remove Offer Letter
-        </DialogTitle>
-        <DialogContent>
-         <p>Do you want to remove this offer letter</p> 
-        </DialogContent>
-        <DialogActions
-        >
-          <button className='px-2 py-1 rounded-lg border-[1px] border-gray-900 hover:bg-gray-100' onClick={handleClose}>Cancel</button>
-          <button className='px-2 py-1 rounded-lg bg-[#D0021B] text-white hover:bg-red-700' onClick={handleRemove}>Remove</button>
-        </DialogActions>
-      </Dialog>
+        setOpen={setOpen}
+        event={event}
+      />
     </div>
   );
 }

@@ -7,11 +7,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ViewIcon, PencilIcon, DeleteIcon } from '../../asset/images/icons';
 import { ADMIN, ADMISSION_OFFICER, EDU_COUNSELLOR } from '../../utils/Constant';
 import { toast } from 'react-toastify';
-import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { EventEmitter } from 'events';
+import BaseConfirmDialog from '../../components/BaseConfirmDialog';
 function VisaDetail() {
   const [items, setItem] = useState();
-  const [open, setOpen] = useState(false)
-  const [idVisa, setIdVisa] = useState()
+  const [open, setOpen] = useState(false);
+  const [idVisa, setIdVisa] = useState();
   const title = 'Visa';
   const listBreadcrumb = [
     {
@@ -46,6 +47,7 @@ function VisaDetail() {
       title: 'Action',
     },
   ];
+  const event = new EventEmitter();
   useEffect(() => {
     getListRecordVisa();
   }, []);
@@ -62,10 +64,7 @@ function VisaDetail() {
   const handleEdit = (id) => {
     navigate(`/record/update-visa/${id}`);
   };
-  const handleClose = ()=>{
-    setOpen(false)
-  }
-  const handleRemove = async ()=>{
+  event.addListener('RemoveItem', async () => {
     const data = await postRequest(`/api/file/delete/visa-record/${idVisa}`);
     if (data.status === 1) {
       toast.success(data.message);
@@ -73,10 +72,10 @@ function VisaDetail() {
     } else {
       toast.error(data.message);
     }
-  }
-  const handleDelete =  (id) => {
-    setOpen(true)
-    setIdVisa(id)
+  });
+  const handleDelete = (id) => {
+    setOpen(true);
+    setIdVisa(id);
   };
   const action = [
     {
@@ -112,22 +111,13 @@ function VisaDetail() {
       <Content>
         <BaseTable headers={headers} items={items} actions={action}></BaseTable>
       </Content>
-      <Dialog
+      <BaseConfirmDialog
+        title="Remove Visa"
+        content="Do you want to remove this visa"
         open={open}
-        onClose={handleClose}
-      >
-        <DialogTitle>
-          Remove Visa
-        </DialogTitle>
-        <DialogContent>
-         <p>Do you want to remove this visa</p> 
-        </DialogContent>
-        <DialogActions
-        >
-          <button className='px-2 py-1 rounded-lg border-[1px] border-gray-900 hover:bg-gray-100' onClick={handleClose}>Cancel</button>
-          <button className='px-2 py-1 rounded-lg bg-[#D0021B] text-white hover:bg-red-700' onClick={handleRemove}>Remove</button>
-        </DialogActions>
-      </Dialog>
+        setOpen={setOpen}
+        event={event}
+      />
     </div>
   );
 }

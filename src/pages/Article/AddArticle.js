@@ -67,7 +67,7 @@ function AddArticle() {
     onSubmit: async (values) => {
       const formData = new FormData();
       formData.append('title', values.title);
-      formData.append('category', values.category.toString());
+      formData.append('category', values.category);
       formData.append('author', values.author);
       formData.append('image', image);
       formData.append('description', values.description);
@@ -144,7 +144,7 @@ function AddArticle() {
               >
                 {listCategory ? (
                   listCategory.map((option, index) => (
-                    <MenuItem key={index} value={option.category}>
+                    <MenuItem key={index} value={option._id}>
                       {option.category}
                     </MenuItem>
                   ))
