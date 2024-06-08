@@ -670,3 +670,162 @@ export const PostIcon = ({
     />
   </svg>
 );
+export const PageManager = ({
+  width = '1.4rem',
+  height = '1.4rem',
+  className,
+}) => (
+  <svg
+    className={className}
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M16 8H8V6H16V8ZM16 10H8V12H16V10ZM20 4V16L14 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V4C4 3.46957 4.21071 2.96086 4.58579 2.58579C4.96086 2.21071 5.46957 2 6 2H18C18.5304 2 19.0391 2.21071 19.4142 2.58579C19.7893 2.96086 20 3.46957 20 4ZM18 14V4H6V20H12V16C12 15.4696 12.2107 14.9609 12.5858 14.5858C12.9609 14.2107 13.4696 14 14 14H18Z"
+      fill="#4D4E50"
+    />
+  </svg>
+);
+
+export const MenuManager = ({
+  width = '1.4rem',
+  height = '1.4rem',
+  className,
+}) => (
+  <svg
+    className={className}
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M7.5 6.75H21M7.5 12H21M7.5 17.25H21"
+      stroke="#4D4E50"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M3.75 7.5C4.16421 7.5 4.5 7.16421 4.5 6.75C4.5 6.33579 4.16421 6 3.75 6C3.33579 6 3 6.33579 3 6.75C3 7.16421 3.33579 7.5 3.75 7.5Z"
+      stroke="#4D4E50"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M3.75 12.75C4.16421 12.75 4.5 12.4142 4.5 12C4.5 11.5858 4.16421 11.25 3.75 11.25C3.33579 11.25 3 11.5858 3 12C3 12.4142 3.33579 12.75 3.75 12.75Z"
+      stroke="#4D4E50"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M3.75 18C4.16421 18 4.5 17.6642 4.5 17.25C4.5 16.8358 4.16421 16.5 3.75 16.5C3.33579 16.5 3 16.8358 3 17.25C3 17.6642 3.33579 18 3.75 18Z"
+      stroke="#4D4E50"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const AddSquare = ({
+  width = '1.6rem',
+  height = '1.6rem',
+  className,
+}) => (
+  <svg
+    className={className}
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M8 12H16"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12 16V8"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const MinusSquare = ({
+  width = '1.6rem',
+  height = '1.6rem',
+  className,
+}) => (
+  <svg
+    className={className}
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M8 12H16"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+export const HomeIcon = ({
+  width = '1.5rem',
+  height = '1.5rem',
+  className,
+}) => (
+  <svg
+    className={className}
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M12 18V15"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M10.0702 2.81985L3.14026 8.36985C2.36027 8.98985 1.86027 10.2999 2.03027 11.2799L3.36027 19.2399C3.60027 20.6599 4.96027 21.8099 6.40027 21.8099H17.6002C19.0302 21.8099 20.4002 20.6499 20.6402 19.2399L21.9702 11.2799C22.1302 10.2999 21.6302 8.98985 20.8602 8.36985L13.9302 2.82985C12.8602 1.96985 11.1302 1.96985 10.0702 2.81985Z"
+      stroke="#292D32"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);

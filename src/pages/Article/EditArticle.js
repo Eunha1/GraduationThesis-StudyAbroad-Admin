@@ -90,9 +90,9 @@ function EditArticle() {
     formik.setFieldValue('author', data.data.author);
     formik.setFieldValue('description', data.data.description);
     formik.setFieldValue('content', data.data.content);
-    let category = []
-    for(const item of data.data.category){
-      category.push(item._id)
+    let category = [];
+    for (const item of data.data.category) {
+      category.push(item._id);
     }
     formik.setFieldValue('category', category);
     setData(data.data);

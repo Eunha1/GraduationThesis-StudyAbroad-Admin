@@ -30,6 +30,15 @@ import UpdateOfferLetter from '../pages/Record/UpdateOfferLetter';
 import UpdateVisa from '../pages/Record/UpdateVisa';
 import EditArticle from '../pages/Article/EditArticle';
 import Category from '../pages/Category/Category';
+import MenuManager from '../pages/PageManager/Menu/Menu';
+import AddMenu from '../pages/PageManager/Menu/AddMenu';
+import EditMenu from '../pages/PageManager/Menu/EditMenu';
+import ListMenu from '../pages/PageManager/News/ListMenu';
+import AddNews from '../pages/PageManager/News/AddNews';
+import Banner from '../pages/HomeManager/Banner';
+import NewsAndEvent from '../pages/HomeManager/NewsAndEvent';
+import Testimonial from '../pages/HomeManager/Testimonial';
+import TestimonialDetail from '../pages/HomeManager/TestimonialDetail';
 export const PRIVATE_ROUTER = [
   {
     key: 'home',
@@ -195,6 +204,66 @@ export const PRIVATE_ROUTER = [
     element: <Category />,
     role: [ADMIN],
   },
+  {
+    key: 'menu',
+    path: '/page-manager/menu',
+    element: <MenuManager />,
+    role: [ADMIN],
+  },
+  {
+    key: 'add-menu',
+    path: '/page-manager/add-menu',
+    element: <AddMenu />,
+    role: [ADMIN],
+  },
+  {
+    key: 'edit-menu',
+    path: '/page-manager/edit-menu/:menu_id',
+    element: <EditMenu />,
+    role: [ADMIN],
+  },
+  {
+    key: 'news',
+    path: '/page-manager/news',
+    element: <ListMenu />,
+    role: [ADMIN],
+  },
+  {
+    key: 'add-news',
+    path: '/page-manager/add-news',
+    element: <AddNews />,
+    role: [ADMIN],
+  },
+  {
+    key: 'banner',
+    path: '/home-manager/banner',
+    element: <Banner />,
+    role: [ADMIN],
+  },
+  {
+    key: 'news-and-event',
+    path: '/home-manager/news-and-event',
+    element: <NewsAndEvent />,
+    role: [ADMIN],
+  },
+  {
+    key: 'testimonial',
+    path: '/home-manager/testimonial',
+    element: <Testimonial/>,
+    role: [ADMIN]
+  },
+  {
+    key: 'create-testimonial',
+    path: '/home-manager/testimonial/create',
+    element: <TestimonialDetail/>,
+    role: [ADMIN]
+  },
+  {
+    key: 'edit-testimonial',
+    path: '/home-manager/testimonial/edit/:id',
+    element: <TestimonialDetail/>,
+    role: [ADMIN]
+  }
 ];
 
 export const PUBLIC_ROUTER = [

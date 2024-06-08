@@ -10,7 +10,10 @@ import {
 import { ADMIN, ADMISSION_OFFICER, EDU_COUNSELLOR } from './Constant';
 import {
   CategoryIcon,
+  HomeIcon,
+  MenuManager,
   NoteIcon,
+  PageManager,
   PostIcon,
   UploadIcon2,
 } from '../asset/images/icons';
@@ -26,7 +29,7 @@ export const Menu = [
   },
   {
     title: 'Quản lý hồ sơ',
-    src: '/',
+    src: '',
     key: 'file',
     icon: <FilePresent />,
     isActive: false,
@@ -49,8 +52,63 @@ export const Menu = [
     ],
   },
   {
+    title: 'Quản lý trang',
+    src: '',
+    key: 'page',
+    icon: <PageManager />,
+    isActive: false,
+    role: [ADMIN],
+    child: [
+      {
+        title: 'Quản lý menu',
+        src: '/page-manager/menu',
+        key: 'menu',
+        icon: <MenuManager />,
+        isActive: false,
+      },
+      {
+        title: 'Trang tin tức',
+        src: '/page-manager/news',
+        key: 'news',
+        icon: <MenuManager />,
+        isActive: false,
+      },
+    ],
+  },
+  {
+    title: 'Quản lý trang chủ',
+    src: '',
+    key: 'home-manager',
+    icon: <HomeIcon />,
+    isActive: false,
+    role: [ADMIN],
+    child: [
+      {
+        title: 'Banner',
+        src: '/home-manager/banner',
+        key: 'banner',
+        icon: <MenuManager />,
+        isActive: false,
+      },
+      {
+        title: 'Tin tức và sự kiện',
+        src: '/home-manager/news-and-event',
+        key: 'news-and-event',
+        icon: <MenuManager />,
+        isActive: false,
+      },
+      {
+        title: 'Đánh giá',
+        src: '/home-manager/testimonial',
+        key: 'testimonial',
+        icon: <MenuManager />,
+        isActive: false,
+      },
+    ],
+  },
+  {
     title: 'Quản lý bài viết',
-    src: '/',
+    src: '',
     key: 'article',
     icon: <ArticleOutlined />,
     isActive: false,
@@ -98,7 +156,7 @@ export const Menu = [
   },
   {
     title: 'Upload',
-    src: '/',
+    src: '',
     key: 'record',
     isActive: false,
     icon: <UploadIcon2 />,

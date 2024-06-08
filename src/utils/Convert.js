@@ -61,11 +61,11 @@ export const extractPathNameFromURL = (url) => {
   return parseURL.pathname.slice(1);
 };
 
-export const  sanitizeTitle = (title) => {
+export const sanitizeTitle = (title) => {
   if (!title) {
-      return '';
+    return '';
   }
-  let slug = "";
+  let slug = '';
   // Change to lower case
   const titleLower = title.toLowerCase();
   // Letter "e"
@@ -85,11 +85,11 @@ export const  sanitizeTitle = (title) => {
   // Trim the last whitespace
   slug = slug.replace(/\s*$/g, '');
   slug = slug.replace(/\?|\(|\)|!|@|#|\$|%|\^|&|:|;|,|=|-|”|“|/g, '');
-  slug = slug.replace(/[.'`":*?<>{}+"]/g,'');
-  slug = slug.replace(/[/]/g,'-');
+  slug = slug.replace(/[.'`":*?<>{}+"]/g, '');
+  slug = slug.replace(/[/]/g, '-');
   // Change whitespace, whitespace + "-" , "-" + whitespace to "-"
   slug = slug.replace(/\s+-/g, '-');
   slug = slug.replace(/-\s+/g, '-');
   slug = slug.replace(/\s+/g, '-');
   return slug;
-}
+};

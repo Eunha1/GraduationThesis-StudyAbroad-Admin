@@ -26,7 +26,18 @@ function BaseTable({ headers, items, actions }) {
                     key={key}
                     className="p-1 text-[14px] text-[#545556] font-Roboto tracking-wide text-center"
                   >
-                    <div>{item[header.key]}</div>
+                    {header.key === 'image' ? (
+                      <div className="flex justify-center">
+                        {/* eslint-disable-next-line */}
+                        <img
+                          src={item[header.key]}
+                          className="w-[150px] h-[100px] object-cover"
+                          alt="image"
+                        />
+                      </div>
+                    ) : (
+                      <div>{item[header.key]}</div>
+                    )}
                     {header.key === 'action' ? (
                       <div className="flex items-center justify-center p-0.5 cursor-pointer">
                         {' '}

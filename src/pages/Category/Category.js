@@ -48,7 +48,7 @@ function Category() {
     },
     {
       key: 'slug',
-      title: 'slug'
+      title: 'slug',
     },
     {
       key: 'action',
@@ -92,18 +92,18 @@ function Category() {
   // form create category
   const validationSchema = yup.object({
     category: yup.string('Enter category').required('Category is required'),
-    slug: yup.string('Enter slug').required('Slug is required')
+    slug: yup.string('Enter slug').required('Slug is required'),
   });
   const formik = useFormik({
     initialValues: {
       category: '',
-      slug: ''
+      slug: '',
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       const data = await postRequest('/api/category/create', {
         category: values.category,
-        slug: values.slug
+        slug: values.slug,
       });
       if (data.status === 1) {
         toast.success(data.message);
@@ -112,14 +112,14 @@ function Category() {
         toast.error(data.message);
       }
       formik.setFieldValue('category', '');
-      formik.setFieldValue('slug','')
+      formik.setFieldValue('slug', '');
       setOpenAdd(false);
     },
   });
-  useEffect(()=>{
-    formik.setFieldValue('slug',sanitizeTitle(formik.values.category))
+  useEffect(() => {
+    formik.setFieldValue('slug', sanitizeTitle(formik.values.category));
     // eslint-disable-next-line
-  },[formik.values.category])
+  }, [formik.values.category]);
   return (
     <div>
       <Breadcrumb title={title} listBreadcrumb={listBreadcrumb} />
@@ -172,9 +172,7 @@ function Category() {
                 size="small"
                 value={formik.values.slug}
                 onChange={formik.handleChange}
-                error={
-                  formik.touched.slug && Boolean(formik.errors.slug)
-                }
+                error={formik.touched.slug && Boolean(formik.errors.slug)}
                 helperText={formik.touched.slug && formik.errors.slug}
               />
             </div>
