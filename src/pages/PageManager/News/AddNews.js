@@ -50,8 +50,11 @@ function AddNews() {
   };
   const handleRemove = () => {
     const newIndex = [...index];
+    const newPostID = [...listPostId]
+    newPostID.pop()
     newIndex.pop();
     setIndex(newIndex);
+    setListPostId(newPostID)
   };
   const validationSchema = yup.object({
     id: yup.string('Choose category').required('Category is required'),
@@ -68,7 +71,7 @@ function AddNews() {
       );
       if (data.status === 1) {
         toast.success(data.message);
-        navigate('/news');
+        navigate('/page-manager/news');
       } else {
         toast.error(data.message);
       }

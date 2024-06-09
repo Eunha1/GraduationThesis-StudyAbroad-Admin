@@ -249,21 +249,21 @@ export const PRIVATE_ROUTER = [
   {
     key: 'testimonial',
     path: '/home-manager/testimonial',
-    element: <Testimonial/>,
-    role: [ADMIN]
+    element: <Testimonial />,
+    role: [ADMIN],
   },
   {
     key: 'create-testimonial',
     path: '/home-manager/testimonial/create',
-    element: <TestimonialDetail/>,
-    role: [ADMIN]
+    element: <TestimonialDetail />,
+    role: [ADMIN],
   },
   {
     key: 'edit-testimonial',
     path: '/home-manager/testimonial/edit/:id',
-    element: <TestimonialDetail/>,
-    role: [ADMIN]
-  }
+    element: <TestimonialDetail />,
+    role: [ADMIN],
+  },
 ];
 
 export const PUBLIC_ROUTER = [

@@ -17,10 +17,15 @@ import { useFormik } from 'formik';
 import { getRequest, postRequest } from '../../services/Api';
 import { toast } from 'react-toastify';
 import { ADMIN } from '../../utils/Constant';
+import BaseConfirmDialog from '../../components/BaseConfirmDialog';
+import { EventEmitter } from 'events';
 function Banner() {
   const [open, setOpen] = useState(false);
   const [banner, setBanner] = useState();
   const [data, setData] = useState();
+  const [openDelete, setOpenDelete] = useState(false)
+  const [Id, setId] = useState()
+  const event = new EventEmitter();
   const title = 'Banner';
   const listBreadcrumb = [
     {
@@ -62,15 +67,19 @@ function Banner() {
     const data = await getRequest('/api/home-manager/list-banner');
     setData(data.data);
   };
-  const handleDelete = async (id) => {
-    const data = await postRequest(`/api/home-manager/delete-banner/${id}`);
+  event.addListener("RemoveItem",async () => {
+    const data = await postRequest(`/api/home-manager/delete-banner/${Id}`);
     if (data.status === 1) {
       toast.success(data.message);
       getList();
     } else {
       toast.error(data.message);
     }
-  };
+  });
+  const handleDelete = (id)=>{
+    setOpenDelete(true)
+    setId(id)
+  }
   const action = [
     {
       key: 'delete-file',
@@ -197,6 +206,13 @@ function Banner() {
       <Content>
         <BaseTable headers={headers} items={data} actions={action}></BaseTable>
       </Content>
+      <BaseConfirmDialog
+      title='Remove banner'
+      content='Do you want remove this banner'
+        open={openDelete}
+        setOpen={setOpenDelete}
+        event={event}
+      />
     </div>
   );
 }
