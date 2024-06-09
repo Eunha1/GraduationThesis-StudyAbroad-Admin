@@ -53,7 +53,7 @@ function EditMenu() {
       const data = await postRequest(`/api/menu/update-menu/${menu_id}`, body);
       if (data.status === 1) {
         toast.success(data.message);
-        navigate('/menu');
+        navigate('/page-manager/menu');
       } else {
         toast.error(data.message);
       }
@@ -82,7 +82,7 @@ function EditMenu() {
     formik.setFieldValue('category', data.data.category._id);
   };
   const handleCancel = () => {
-    navigate('/menu');
+    navigate('/page-manager/menu');
   };
   return (
     <div>

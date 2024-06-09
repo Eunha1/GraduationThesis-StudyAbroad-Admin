@@ -43,7 +43,7 @@ function AddNews() {
     setListMenu(data.data);
   };
   const handleCancel = () => {
-    navigate('/news');
+    navigate('/page-manager/news');
   };
   const handleAdd = () => {
     setIndex([...index, { index: 2 }]);

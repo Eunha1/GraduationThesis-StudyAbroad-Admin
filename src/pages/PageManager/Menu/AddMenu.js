@@ -64,14 +64,14 @@ function AddMenu() {
       const data = await postRequest('/api/menu/create-menu', body);
       if (data.status === 1) {
         toast.success(data.message);
-        navigate('/menu');
+        navigate('/page-manager/menu');
       } else {
         toast.error(data.message);
       }
     },
   });
   const handleCancel = () => {
-    navigate('/menu');
+    navigate('/page-manager/menu');
   };
   return (
     <div>
