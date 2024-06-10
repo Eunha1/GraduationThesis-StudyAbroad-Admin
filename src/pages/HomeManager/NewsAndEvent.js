@@ -48,6 +48,10 @@ function NewsAndEvent() {
       title: 'action'
     }
   ]
+  const typeMapping = {
+    1: 'Sự kiện',
+    2: 'Tin tức'
+  }
   event.addListener("RemoveItem", async ()=>{
     const data = await postRequest(`/api/home-manager/delete/news-and-event/${idPost}`)
     if(data.status === 1){
@@ -75,6 +79,10 @@ function NewsAndEvent() {
   }, []);
   const getList = async () => {
     const data = await getRequest('/api/home-manager/news-and-event/list');
+    data.data = data.data.map((item)=>({
+      ...item,
+      type: typeMapping[item.type]
+    }))
     setData(data.data);
   };
   const validationSchema = yup.object({

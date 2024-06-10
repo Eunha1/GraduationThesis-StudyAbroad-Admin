@@ -60,11 +60,20 @@ function Banner() {
       key: 'action',
     },
   ];
+
+  const typeBannerMapping = {
+    1: 'Top banner',
+    2: 'Bottom banner'
+  }
   useEffect(() => {
     getList();
   }, []);
   const getList = async () => {
     const data = await getRequest('/api/home-manager/list-banner');
+    data.data = data.data.map((item)=>({
+      ...item,
+      type: typeBannerMapping[item.type]
+    }))
     setData(data.data);
   };
   event.addListener("RemoveItem",async () => {

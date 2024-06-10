@@ -62,11 +62,20 @@ function AdviseInfo() {
     //   title: 'action',
     // },
   ];
+  const statusMapping = {
+    0: 'Mới đăng kí'
+  }
   useEffect(() => {
     getListInfo();
   }, []);
   const getListInfo = async () => {
     const data = await getRequest('/api/customer/advise-info');
+    data.data = data.data.map((item)=>(
+      {
+        ...item,
+        status: statusMapping[item.status]
+      }
+    ))
     setItem(data.data);
   };
   const navigate = useNavigate();

@@ -56,12 +56,24 @@ function VisaFile() {
       title: 'Action',
     },
   ];
+  const statusMapping = {
+    0: 'Chưa đủ hồ sơ',
+    1: 'Đã đủ hồ sơ',
+    2: 'Đã xin visa',
+    3: 'Đã có visa' 
+  }
   const event = new EventEmitter();
   useEffect(() => {
     getVisaFile();
   }, []);
   const getVisaFile = async () => {
     const data = await getRequest('/api/file/visa-file');
+    data.data = data.data.map((item)=>(
+      {
+        ...item,
+        status: statusMapping[item.status]
+      }
+    ))
     setItem(data.data);
   };
   const navigate = useNavigate();
