@@ -63,7 +63,7 @@ function AdviseInfo() {
     // },
   ];
   const statusMapping = {
-    0: 'Mới đăng kí'
+    1: 'Mới đăng kí'
   }
   useEffect(() => {
     getListInfo();
