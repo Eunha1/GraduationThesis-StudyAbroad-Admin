@@ -1,19 +1,39 @@
 import BaseTable from '../../components/BaseTable';
 import Breadcrumb from '../../components/Breadcrumb';
 import Content from '../../components/Content';
-import { ViewIcon, PencilIcon, DeleteIcon } from '../../asset/images/icons';
-import { EDU_COUNSELLOR } from '../../utils/Constant';
+import {
+  ViewIcon,
+  PencilIcon,
+  DeleteIcon,
+  AssignTask,
+} from '../../asset/images/icons';
+import {
+  ADMISSION_OFFICER,
+  CONSULTATION_STATUS,
+  EDU_COUNSELLOR,
+} from '../../utils/Constant';
 import { getRequest, postRequest } from '../../services/Api';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import BaseConfirmDialog from '../../components/BaseConfirmDialog';
 import { EventEmitter } from 'events';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@mui/material';
 function Consultation() {
-  const title = 'Thông tin tư vấn';
   const [items, setItem] = useState();
   const [open, setOpen] = useState(false);
+  const [openAssign, setOpenAssign] = useState(false);
   const [idConsultation, setIdConsultation] = useState();
+  const [listStaff, setListStaff] = useState();
+  const [staffID, setStaffID] = useState();
+  const event = new EventEmitter();
+  const navigate = useNavigate();
+  const title = 'Thông tin tư vấn';
   const listBreadcrumb = [
     {
       src: '/',
@@ -47,17 +67,41 @@ function Consultation() {
       title: 'Ngành học',
     },
     {
+      key: 'status',
+      title: 'Trạng thái',
+    },
+    {
       key: 'action',
       title: 'Action',
     },
   ];
-  const event = new EventEmitter();
-  const navigate = useNavigate();
+
   const handleView = (id) => {
     navigate(`/consultation/${id}`);
   };
   const handleEdit = (id) => {
     navigate(`/consultation/update/${id}`);
+  };
+  const handleAssign = (id) => {
+    setOpenAssign(true);
+    setIdConsultation(id);
+  };
+  const handleClose = () => {
+    setOpenAssign(false);
+  };
+  const handleSave = async () => {
+    const body = {
+      receiver: staffID,
+      task: idConsultation,
+    };
+    const data = await postRequest('/api/task/create/for-consultation', body);
+    if (data.status === 1) {
+      toast.success(data.message);
+      setOpenAssign(false);
+    } else {
+      toast.error(data.message);
+      setOpenAssign(false);
+    }
   };
   event.addListener('RemoveItem', async () => {
     const data = await postRequest(
@@ -93,14 +137,35 @@ function Consultation() {
       event: handleDelete,
       role: [EDU_COUNSELLOR],
     },
+    {
+      key: 'assign-task',
+      component: <AssignTask />,
+      event: handleAssign,
+      role: [EDU_COUNSELLOR],
+    },
   ];
+  const statusMapping = {
+    [CONSULTATION_STATUS.POTENTIAL]: 'Tiềm năng',
+    [CONSULTATION_STATUS.NO_POTENTIAL]: 'Không tiềm năng',
+  };
   useEffect(() => {
     getListConsultation();
+    getListStaff();
     // eslint-disable-next-line
   }, []);
   const getListConsultation = async () => {
     const data = await getRequest('/api/consultation/list-consultation');
-    setItem(data.data);
+    data.data.data = data.data.data.map((item) => ({
+      ...item,
+      status: statusMapping[item.status],
+    }));
+    setItem(data.data.data);
+  };
+  const getListStaff = async () => {
+    const data = await getRequest(
+      `/api/staff/list-staff?role=${ADMISSION_OFFICER}`,
+    );
+    setListStaff(data.data);
   };
   return (
     <div>
@@ -123,6 +188,44 @@ function Consultation() {
         setOpen={setOpen}
         event={event}
       />
+      <Dialog open={openAssign} onClose={() => setOpenAssign(false)}>
+        <DialogTitle>Danh sách nhân viên</DialogTitle>
+        <DialogContent>
+          {listStaff ? (
+            listStaff.map((item, index) => (
+              <div key={index} className="flex items-center p-2">
+                <input
+                  type="radio"
+                  className="cursor-pointer"
+                  value={item.email}
+                  id={`email-${index}`}
+                  name="staffRadio"
+                  onChange={() => setStaffID(item._id)}
+                ></input>
+                <label htmlFor={`email-${index}`} className="ml-4">
+                  {item.email}
+                </label>
+              </div>
+            ))
+          ) : (
+            <div>Loading</div>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <button
+            className="px-2 py-1 rounded-lg border-[1px] border-gray-900 hover:bg-gray-100"
+            onClick={handleClose}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-2 py-1 rounded-lg bg-[#3861AF] text-white hover:bg-red-700"
+            onClick={handleSave}
+          >
+            Save
+          </button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

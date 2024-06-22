@@ -56,7 +56,7 @@ function Testimonial() {
   const handleEdit = (id) => {
     navigate(`/home-manager/testimonial/edit/${id}`);
   };
-  event.addListener("RemoveItem",async () => {
+  event.addListener('RemoveItem', async () => {
     const data = await postRequest(
       `/api/home-manager/delete-testimonial/${Id}`,
     );
@@ -67,10 +67,10 @@ function Testimonial() {
       toast.error(data.message);
     }
   });
-  const handleDelete = (id)=>{
-    setOpen(true)
-    setId(id)
-  }
+  const handleDelete = (id) => {
+    setOpen(true);
+    setId(id);
+  };
   const action = [
     {
       key: 'edit',
@@ -107,8 +107,8 @@ function Testimonial() {
         <BaseTable headers={headers} items={data} actions={action}></BaseTable>
       </Content>
       <BaseConfirmDialog
-        title='Xoá đánh giá'
-        content='Do you want remove this '
+        title="Xoá đánh giá"
+        content="Do you want remove this "
         open={open}
         setOpen={setOpen}
         event={event}

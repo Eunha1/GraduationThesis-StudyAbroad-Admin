@@ -50,11 +50,11 @@ function AddNews() {
   };
   const handleRemove = () => {
     const newIndex = [...index];
-    const newPostID = [...listPostId]
-    newPostID.pop()
+    const newPostID = [...listPostId];
+    newPostID.pop();
     newIndex.pop();
     setIndex(newIndex);
-    setListPostId(newPostID)
+    setListPostId(newPostID);
   };
   const validationSchema = yup.object({
     id: yup.string('Choose category').required('Category is required'),

@@ -39,6 +39,7 @@ import Banner from '../pages/HomeManager/Banner';
 import NewsAndEvent from '../pages/HomeManager/NewsAndEvent';
 import Testimonial from '../pages/HomeManager/Testimonial';
 import TestimonialDetail from '../pages/HomeManager/TestimonialDetail';
+import Task from '../pages/Task/Task';
 export const PRIVATE_ROUTER = [
   {
     key: 'home',
@@ -65,7 +66,12 @@ export const PRIVATE_ROUTER = [
     element: <EditArticle />,
     role: [ADMIN],
   },
-  { key: 'assign', path: '/assign', element: <Assign />, role: [ADMIN] },
+  {
+    key: 'assign',
+    path: '/assign',
+    element: <Assign />,
+    role: [ADMIN, EDU_COUNSELLOR],
+  },
   {
     key: 'advise-info',
     path: '/advise-info',
@@ -263,6 +269,12 @@ export const PRIVATE_ROUTER = [
     path: '/home-manager/testimonial/edit/:id',
     element: <TestimonialDetail />,
     role: [ADMIN],
+  },
+  {
+    key: 'task',
+    path: '/task',
+    element: <Task />,
+    role: [EDU_COUNSELLOR, ADMISSION_OFFICER],
   },
 ];
 

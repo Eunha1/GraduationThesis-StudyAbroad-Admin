@@ -64,14 +64,14 @@ function OfferLetter() {
     0: 'Chưa đủ hồ sơ',
     1: 'Đã đủ hồ sơ',
     2: 'Đã xin gửi thư mời',
-    3: 'Đã có thư mời'
-};
+    3: 'Đã có thư mời',
+  };
   const getListOfferLetter = async () => {
     const data = await getRequest('/api/file/offer-letter-file');
-    data.data = data.data.map((item)=>({
+    data.data = data.data.map((item) => ({
       ...item,
-      status: statusMapping[item.status]
-    }))
+      status: statusMapping[item.status],
+    }));
     setItem(data.data);
   };
   const navigate = useNavigate();

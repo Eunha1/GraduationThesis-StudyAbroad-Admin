@@ -28,6 +28,14 @@ export const Menu = [
     role: [ADMIN, EDU_COUNSELLOR, ADMISSION_OFFICER],
   },
   {
+    title: 'Nhiệm vụ',
+    src: '/task',
+    key: 'task',
+    icon: <AssignmentLateOutlined />,
+    isActive: false,
+    role: [EDU_COUNSELLOR, ADMISSION_OFFICER],
+  },
+  {
     title: 'Quản lý hồ sơ',
     src: '',
     key: 'file',
@@ -136,7 +144,7 @@ export const Menu = [
     key: 'assign',
     isActive: false,
     icon: <AssignmentLateOutlined />,
-    role: [ADMIN],
+    role: [ADMIN, EDU_COUNSELLOR],
   },
   {
     title: 'Thông tin tư vấn',

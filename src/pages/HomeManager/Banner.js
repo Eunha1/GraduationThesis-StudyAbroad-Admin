@@ -23,8 +23,8 @@ function Banner() {
   const [open, setOpen] = useState(false);
   const [banner, setBanner] = useState();
   const [data, setData] = useState();
-  const [openDelete, setOpenDelete] = useState(false)
-  const [Id, setId] = useState()
+  const [openDelete, setOpenDelete] = useState(false);
+  const [Id, setId] = useState();
   const event = new EventEmitter();
   const title = 'Banner';
   const listBreadcrumb = [
@@ -63,20 +63,20 @@ function Banner() {
 
   const typeBannerMapping = {
     1: 'Top banner',
-    2: 'Bottom banner'
-  }
+    2: 'Bottom banner',
+  };
   useEffect(() => {
     getList();
   }, []);
   const getList = async () => {
     const data = await getRequest('/api/home-manager/list-banner');
-    data.data = data.data.map((item)=>({
+    data.data = data.data.map((item) => ({
       ...item,
-      type: typeBannerMapping[item.type]
-    }))
+      type: typeBannerMapping[item.type],
+    }));
     setData(data.data);
   };
-  event.addListener("RemoveItem",async () => {
+  event.addListener('RemoveItem', async () => {
     const data = await postRequest(`/api/home-manager/delete-banner/${Id}`);
     if (data.status === 1) {
       toast.success(data.message);
@@ -85,10 +85,10 @@ function Banner() {
       toast.error(data.message);
     }
   });
-  const handleDelete = (id)=>{
-    setOpenDelete(true)
-    setId(id)
-  }
+  const handleDelete = (id) => {
+    setOpenDelete(true);
+    setId(id);
+  };
   const action = [
     {
       key: 'delete-file',
@@ -123,6 +123,7 @@ function Banner() {
       formData.append('title', values.title);
       formData.append('type', values.type);
       formData.append('image', banner);
+      console.log(banner);
       const data = await postRequest('/api/home-manager/new-banner', formData);
       if (data.status === 1) {
         toast.success(data.message);
@@ -216,8 +217,8 @@ function Banner() {
         <BaseTable headers={headers} items={data} actions={action}></BaseTable>
       </Content>
       <BaseConfirmDialog
-      title='Remove banner'
-      content='Do you want remove this banner'
+        title="Remove banner"
+        content="Do you want remove this banner"
         open={openDelete}
         setOpen={setOpenDelete}
         event={event}

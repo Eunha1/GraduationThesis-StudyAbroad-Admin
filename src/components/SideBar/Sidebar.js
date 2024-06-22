@@ -9,7 +9,7 @@ function SideBar() {
     setOpenMenus({ ...openMenus, [item.key]: !openMenus[item.key] });
   };
   return (
-    <div className="pl-4 py-4 grid grid-rows-10 h-[610px]">
+    <div className="pl-4 py-4 grid grid-rows-10 h-[600px]">
       {Menu.map((item) => (
         <Fragment key={item.key}>
           {checkRoles(item.role) ? (
@@ -39,7 +39,7 @@ function SideBar() {
                 <Link
                   to={child.src}
                   key={child.key}
-                  className="flex  items-center p-1 ml-8"
+                  className="flex items-center p-1 ml-8"
                 >
                   <div className=" mr-5">{child.icon}</div>
                   <div className="text-[16px] text-gray-900">{child.title}</div>
