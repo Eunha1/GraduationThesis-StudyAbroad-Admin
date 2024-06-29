@@ -73,12 +73,6 @@ function Article() {
   const handleView = (id) => {};
   const action = [
     {
-      key: 'view',
-      component: <ViewIcon />,
-      event: handleView,
-      role: [ADMIN],
-    },
-    {
       key: 'edit',
       component: <PencilIcon />,
       event: handleEdit,

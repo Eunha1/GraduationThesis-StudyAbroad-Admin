@@ -7,10 +7,10 @@ function Layout({ children }) {
         <Header />
       </div>
       <div className="grid grid-cols-12 flex-1 h-auto">
-        <div className="col-span-2">
+        <div className="lg:col-span-2 col-span-1">
           <SideBar />
         </div>
-        <div className="col-span-10 mr-[20px] rounded-[18px] bg-white py-4 px-2">
+        <div className="lg:col-span-10 col-span-11 mr-[20px] rounded-[18px] bg-white py-4 px-2">
           {children}
         </div>
       </div>

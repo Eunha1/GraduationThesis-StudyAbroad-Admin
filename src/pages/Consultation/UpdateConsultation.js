@@ -41,7 +41,7 @@ function UpdateConsultation() {
     },
     onSubmit: async (values) => {
       const data = await postRequest(
-        `/api/consultation/update-consultation/${consultation_id}`,
+        `/api/consultation/update/${consultation_id}`,
         values,
       );
       if (data.status === 1) {
@@ -65,7 +65,7 @@ function UpdateConsultation() {
   }, []);
   const getConsultationInfo = async () => {
     const data = await getRequest(
-      `/api/consultation/consultation-detail/${consultation_id}`,
+      `/api/consultation/detail/${consultation_id}`,
     );
     formik.setFieldValue('school_year', data.data.school_year);
     formik.setFieldValue('school', data.data.school_name);

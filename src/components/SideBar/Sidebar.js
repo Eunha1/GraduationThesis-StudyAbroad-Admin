@@ -18,12 +18,12 @@ function SideBar() {
               className="grid grid-cols-5 items-center p-1"
               onClick={item?.child ? () => handleShow(item) : ''}
             >
-              <div className="col-span-1 mr-5">{item.icon}</div>
-              <div className="text-[16px] text-gray-900 col-span-3">
+              <div className="lg:col-span-1 mr-5">{item.icon}</div>
+              <div className="lg:flex hidden text-[16px] text-gray-900 lg:col-span-3">
                 {item.title}
               </div>
               {item?.child && item?.child.length > 0 ? (
-                <div className="col-span-1 ml-3">
+                <div className="lg:col-span-1 lg:flex hidden ml-3">
                   <ArrowDouwn />
                 </div>
               ) : (
@@ -42,7 +42,7 @@ function SideBar() {
                   className="flex items-center p-1 ml-8"
                 >
                   <div className=" mr-5">{child.icon}</div>
-                  <div className="text-[16px] text-gray-900">{child.title}</div>
+                  <div className="lg:flex hidden text-[16px] text-gray-900">{child.title}</div>
                 </Link>
               ))}
             </>

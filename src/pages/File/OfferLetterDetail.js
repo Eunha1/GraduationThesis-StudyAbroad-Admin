@@ -71,12 +71,10 @@ function OfferLetterDetail() {
               </div>
               <div className="col-span-1 ml-[20px]">
                 <div className="py-1">
-                  <span className="font-medium mr-3">Tên nhân viên :</span>
-                  {infomation.Staff_name}
-                </div>
-                <div className="py-1">
-                  <span className="font-medium mr-3">Số điện thoại :</span>
-                  {infomation.Staff_phone}
+                  <span className="font-medium mr-3">Nhân viên xử lý :</span>
+                  {infomation.staff.map((item,index)=>(
+                    <div key={index} className='ml-6'>{item.email}</div>
+                  ))}
                 </div>
                 <div className="py-1">
                   <span className="font-medium mr-3">Thời gian cập nhật :</span>

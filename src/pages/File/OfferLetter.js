@@ -68,11 +68,11 @@ function OfferLetter() {
   };
   const getListOfferLetter = async () => {
     const data = await getRequest('/api/file/offer-letter-file');
-    data.data = data.data.map((item) => ({
+    data.data.data = data.data.data.map((item) => ({
       ...item,
       status: statusMapping[item.status],
     }));
-    setItem(data.data);
+    setItem(data.data.data);
   };
   const navigate = useNavigate();
   const handleView = (id) => {

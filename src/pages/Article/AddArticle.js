@@ -164,7 +164,7 @@ function AddArticle() {
               type="text"
               name="description"
               multiline
-              rows={3}
+              rows={2}
               placeholder="Enter description"
               label="description"
               fullWidth

@@ -59,12 +59,40 @@ function Consultation() {
       title: 'Số điện thoại',
     },
     {
+      key: 'customer_email',
+      title: 'Địa chỉ email'
+    },
+    {
+      key: 'school_year',
+      title: 'Năm dự định học'
+    },
+    {
       key: 'school',
       title: 'Trường dự định học',
     },
     {
       key: 'majors',
       title: 'Ngành học',
+    },
+    {
+      key: 'level',
+      title: 'Trình độ theo học'
+    },
+    {
+      key: 'country',
+      title: 'Quốc gia'
+    },
+    {
+      key: 'finance',
+      title: 'Khả năng tài chính'
+    },
+    {
+      key: 'schoolarship',
+      title: 'Yêu câù về học bổng'
+    },
+    {
+      key: 'note',
+      title: 'Ghi chú'
     },
     {
       key: 'status',
@@ -76,9 +104,6 @@ function Consultation() {
     },
   ];
 
-  const handleView = (id) => {
-    navigate(`/consultation/${id}`);
-  };
   const handleEdit = (id) => {
     navigate(`/consultation/update/${id}`);
   };
@@ -94,7 +119,7 @@ function Consultation() {
       receiver: staffID,
       task: idConsultation,
     };
-    const data = await postRequest('/api/task/create/for-consultation', body);
+    const data = await postRequest('/api/task/create', body);
     if (data.status === 1) {
       toast.success(data.message);
       setOpenAssign(false);
@@ -105,7 +130,7 @@ function Consultation() {
   };
   event.addListener('RemoveItem', async () => {
     const data = await postRequest(
-      `/api/consultation/delete/consultation/${idConsultation}`,
+      `/api/consultation/delete/${idConsultation}`,
     );
     if (data.status === 1) {
       toast.success(data.message);
@@ -119,12 +144,6 @@ function Consultation() {
     setIdConsultation(id);
   };
   const action = [
-    {
-      key: 'view-detail',
-      component: <ViewIcon />,
-      event: handleView,
-      role: [EDU_COUNSELLOR],
-    },
     {
       key: 'edit-file',
       component: <PencilIcon />,
@@ -154,7 +173,7 @@ function Consultation() {
     // eslint-disable-next-line
   }, []);
   const getListConsultation = async () => {
-    const data = await getRequest('/api/consultation/list-consultation');
+    const data = await getRequest('/api/consultation/list');
     data.data.data = data.data.data.map((item) => ({
       ...item,
       status: statusMapping[item.status],

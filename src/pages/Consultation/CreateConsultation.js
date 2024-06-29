@@ -45,7 +45,7 @@ function CreateConsultation() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       const data = await postRequest(
-        '/api/consultation/create-consultation',
+        '/api/consultation/create',
         values,
       );
       if (data.status === 1) {

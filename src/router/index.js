@@ -21,7 +21,6 @@ import OfferLetterRecordDetail from '../pages/Record/OfferLetterDetail';
 import ViewOfferLetter from '../pages/Record/ViewOfferLetter';
 import ViewVisa from '../pages/Record/ViewVisa';
 import Consultation from '../pages/Consultation/Consultation';
-import ConsultationDetail from '../pages/Consultation/ConsultationDetail';
 import CreateConsultation from '../pages/Consultation/CreateConsultation';
 import UpdateConsultation from '../pages/Consultation/UpdateConsultation';
 import UpdateOfferLetterFile from '../pages/File/UpdateFile/OfferLetter';
@@ -160,12 +159,6 @@ export const PRIVATE_ROUTER = [
     key: 'consultation',
     path: '/consultation',
     element: <Consultation />,
-    role: [EDU_COUNSELLOR],
-  },
-  {
-    key: 'consultation-detail',
-    path: '/consultation/:consultation_id',
-    element: <ConsultationDetail />,
     role: [EDU_COUNSELLOR],
   },
   {
