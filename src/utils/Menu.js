@@ -155,14 +155,6 @@ export const Menu = [
     role: [ADMIN],
   },
   {
-    title: 'Commission',
-    src: '/commission',
-    key: 'commission',
-    isActive: false,
-    icon: <PaidOutlined />,
-    role: [ADMIN],
-  },
-  {
     title: 'Upload',
     src: '',
     key: 'record',
