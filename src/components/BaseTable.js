@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
 import { checkRoles } from '../utils/Authen';
-import BasePagination from './BasePagination';
 
 function BaseTable({ headers, items, actions }) {
   return (
@@ -76,9 +75,6 @@ function BaseTable({ headers, items, actions }) {
             </tbody>
           )}
         </table>
-      </div>
-      <div className="flex items-center justify-end mt-[20px]">
-        <BasePagination />
       </div>
     </div>
   );

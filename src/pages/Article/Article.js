@@ -1,6 +1,6 @@
 import BaseTable from '../../components/BaseTable';
 import Content from '../../components/Content';
-import { DeleteIcon, PencilIcon, ViewIcon } from '../../asset/images/icons';
+import { DeleteIcon, PencilIcon } from '../../asset/images/icons';
 import Breadcrumb from '../../components/Breadcrumb';
 import { Link, useNavigate } from 'react-router-dom';
 import { ADMIN } from '../../utils/Constant';
@@ -9,10 +9,12 @@ import { getRequest, postRequest } from '../../services/Api';
 import { toast } from 'react-toastify';
 import BaseConfirmDialog from '../../components/BaseConfirmDialog';
 import { EventEmitter } from 'events';
+import BasePagination from '../../components/BasePagination';
 function Article() {
   const [item, setItem] = useState();
   const [open, setOpen] = useState(false);
   const [idArticle, setIdArticle] = useState();
+  const [totalPage, setTotalPage] = useState()
   const header = [
     {
       key: 'stt',
@@ -54,6 +56,9 @@ function Article() {
   ];
   const event = new EventEmitter();
   const navigate = useNavigate();
+  const onPageChange = (page)=>{
+    getListPost(page)
+  }
   const handleEdit = (id) => {
     navigate(`/article/update/${id}`);
   };
@@ -70,7 +75,6 @@ function Article() {
     setOpen(true);
     setIdArticle(id);
   };
-  const handleView = (id) => {};
   const action = [
     {
       key: 'edit',
@@ -88,11 +92,10 @@ function Article() {
   useEffect(() => {
     getListPost();
   }, []);
-  const getListPost = async () => {
-    const data = await getRequest('/api/post/list-post');
-    if (data.status === 1) {
-      setItem(data.data);
-    }
+  const getListPost = async (page = 1) => {
+    const data = await getRequest(`/api/post/list-post?page=${page}&limit=10`);
+    setItem(data.data.data)
+    setTotalPage(data.data.paginate.total_page)
   };
   return (
     <div>
@@ -107,6 +110,9 @@ function Article() {
       </button>
       <Content>
         <BaseTable headers={header} items={item} actions={action}></BaseTable>
+        <div className='flex items-center justify-end mt-7'>
+          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        </div>
       </Content>
       <BaseConfirmDialog
         title="Remove article"

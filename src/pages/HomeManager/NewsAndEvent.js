@@ -20,12 +20,14 @@ import { DeleteIcon } from '../../asset/images/icons';
 import { ADMIN } from '../../utils/Constant';
 import BaseConfirmDialog from '../../components/BaseConfirmDialog';
 import { EventEmitter } from 'events';
+import BasePagination from '../../components/BasePagination';
 function NewsAndEvent() {
   const [data, setData] = useState();
   const [open, setOpen] = useState(false);
   const [listPost, setListPost] = useState();
   const [openDelete, setOpenDelete] = useState(false);
   const [idPost, setIdPost] = useState();
+  const [totalPage, setTotalPage] = useState()
   const event = new EventEmitter();
   const title = 'Tin tức và sự kiện';
   const listBreadcrumb = [
@@ -87,15 +89,20 @@ function NewsAndEvent() {
   useEffect(() => {
     getList();
     getListPost();
+    // eslint-disable-next-line
   }, []);
-  const getList = async () => {
-    const data = await getRequest('/api/home-manager/news-and-event/list');
-    data.data = data.data.map((item) => ({
+  const getList = async (page = 1) => {
+    const data = await getRequest(`/api/home-manager/news-and-event/list?page=${page}&limit=10`);
+    data.data.data = data.data.data.map((item) => ({
       ...item,
       type: typeMapping[item.type],
     }));
-    setData(data.data);
+    setData(data.data.data);
+    setTotalPage(data.data.paginate.total_page)
   };
+  const onPageChange = (page)=>{
+    getList(page)
+  }
   const validationSchema = yup.object({
     type: yup.string('Choose type').required('Type is required'),
     post_id: yup.string('Choose post').required('Post is required'),
@@ -126,7 +133,7 @@ function NewsAndEvent() {
   });
   const getListPost = async () => {
     const data = await getRequest('/api/post/list-post');
-    setListPost(data.data);
+    setListPost(data.data.data);
   };
   const handleCloseAdd = () => {
     setOpen(false);
@@ -226,7 +233,10 @@ function NewsAndEvent() {
         </Box>
       </Dialog>
       <Content>
-        <BaseTable headers={headers} actions={action} items={data}></BaseTable>{' '}
+        <BaseTable headers={headers} actions={action} items={data}></BaseTable>
+        <div className='flex items-center justify-end mt-7'>
+          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        </div>
       </Content>
       <BaseConfirmDialog
         title="Xóa bài viết"

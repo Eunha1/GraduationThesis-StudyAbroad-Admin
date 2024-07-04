@@ -44,10 +44,7 @@ function CreateConsultation() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      const data = await postRequest(
-        '/api/consultation/create',
-        values,
-      );
+      const data = await postRequest('/api/consultation/create', values);
       if (data.status === 1) {
         toast.success(data.message);
         navigate('/consultation');

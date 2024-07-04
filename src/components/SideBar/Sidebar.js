@@ -42,7 +42,9 @@ function SideBar() {
                   className="flex items-center p-1 ml-8"
                 >
                   <div className=" mr-5">{child.icon}</div>
-                  <div className="lg:flex hidden text-[16px] text-gray-900">{child.title}</div>
+                  <div className="lg:flex hidden text-[16px] text-gray-900">
+                    {child.title}
+                  </div>
                 </Link>
               ))}
             </>

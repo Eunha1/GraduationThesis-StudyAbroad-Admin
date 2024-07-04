@@ -12,12 +12,14 @@ import {
   DialogTitle,
 } from '@mui/material';
 import { toast } from 'react-toastify';
+import BasePagination from '../../components/BasePagination';
 function AdviseInfo() {
   const [items, setItem] = useState();
   const [listStaff, setListStaff] = useState();
   const [ID, setID] = useState();
   const [staffID, setStaffID] = useState();
   const [open, setOpen] = useState(false);
+  const [totalPage, setTotalPage] = useState()
   const title = 'Thông tin tư vấn';
   const listBreadcrumb = [
     {
@@ -78,14 +80,16 @@ function AdviseInfo() {
   useEffect(() => {
     getListInfo();
     getListStaff();
+    // eslint-disable-next-line
   }, []);
-  const getListInfo = async () => {
-    const data = await getRequest('/api/customer/list-advise?status=1');
+  const getListInfo = async (page = 1) => {
+    const data = await getRequest(`api/customer/list-advise?status=1&page=${page}&limit=10`);
     data.data.data = data.data.data.map((item) => ({
       ...item,
       status: statusMapping[item.status],
     }));
     setItem(data.data.data);
+    setTotalPage(data.data.paginate.total_page)
   };
   const getListStaff = async () => {
     const data = await getRequest(
@@ -93,6 +97,9 @@ function AdviseInfo() {
     );
     setListStaff(data.data);
   };
+  const onPageChange = (page)=>{
+    getListInfo(page)
+  }
   const handleAssign = (id) => {
     setOpen(true);
     setID(id);
@@ -127,6 +134,9 @@ function AdviseInfo() {
       <Breadcrumb title={title} listBreadcrumb={listBreadcrumb} />
       <Content>
         <BaseTable headers={headers} items={items} actions={actions} />
+        <div className='flex items-center justify-end mt-7'>
+          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        </div>
       </Content>
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Danh sách nhân viên</DialogTitle>

@@ -11,9 +11,10 @@ import {
   ADMIN,
   CONSULTATION_STATUS,
 } from '../../utils/Constant';
-
+import BasePagination from '../../components/BasePagination';
 function Assign() {
   const [data, setData] = useState();
+  const [totalPage, setTotalPage] = useState();
   const title = 'Quản lý công việc';
   const listBreadcrumb = [
     {
@@ -56,6 +57,9 @@ function Assign() {
       title: 'Trạng thái nhiệm vụ',
     },
   ];
+  const onPageChange = (page) => {
+    getListAdvise(page);
+  };
   const statusMapping = {
     [ADVISE_STATUS.NEWADVISE]: 'Mới đăng kí',
     [ADVISE_STATUS.WATTING]: 'Chờ nhận tư vấn',
@@ -79,8 +83,10 @@ function Assign() {
     }
     // eslint-disable-next-line
   }, []);
-  const getListAdvise = async () => {
-    const data = await getRequest('/api/task/owner-task');
+  const getListAdvise = async (page = 1) => {
+    const data = await getRequest(
+      `/api/task/owner-task?page=${page}&limit=${4}`,
+    );
     data.data.data = data.data.data.map((item) => ({
       ...item,
       taskStatus: statusTask[item.status],
@@ -88,9 +94,12 @@ function Assign() {
       status: statusMapping[item.task.status],
     }));
     setData(data.data.data);
+    setTotalPage(data.data.paginate.total_page);
   };
-  const getListConsultation = async () => {
-    const data = await getRequest('/api/task/owner-task-consultation');
+  const getListConsultation = async (page = 1) => {
+    const data = await getRequest(
+      `/api/task/owner-task-consultation?page=${page}&limit=${10}`,
+    );
     data.data.data = data.data.data.map((item) => ({
       ...item,
       taskStatus: statusTask[item.status],
@@ -98,12 +107,19 @@ function Assign() {
       status: consultationStatus[item.task.status],
     }));
     setData(data.data.data);
+    setTotalPage(data.data.paginate.total_page);
   };
   return (
     <div>
       <Breadcrumb title={title} listBreadcrumb={listBreadcrumb} />
       <Content>
         <BaseTable headers={headers} items={data}></BaseTable>
+        <div className="flex items-center justify-end mt-7">
+          <BasePagination
+            totalPage={totalPage}
+            onPageChange={onPageChange}
+          ></BasePagination>
+        </div>
       </Content>
     </div>
   );

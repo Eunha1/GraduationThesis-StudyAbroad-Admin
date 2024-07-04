@@ -2,7 +2,6 @@ import BaseTable from '../../components/BaseTable';
 import Breadcrumb from '../../components/Breadcrumb';
 import Content from '../../components/Content';
 import {
-  ViewIcon,
   PencilIcon,
   DeleteIcon,
   AssignTask,
@@ -24,6 +23,7 @@ import {
   DialogContent,
   DialogTitle,
 } from '@mui/material';
+import BasePagination from '../../components/BasePagination';
 function Consultation() {
   const [items, setItem] = useState();
   const [open, setOpen] = useState(false);
@@ -31,6 +31,7 @@ function Consultation() {
   const [idConsultation, setIdConsultation] = useState();
   const [listStaff, setListStaff] = useState();
   const [staffID, setStaffID] = useState();
+  const [totalPage, setTotalPage] = useState()
   const event = new EventEmitter();
   const navigate = useNavigate();
   const title = 'Thông tin tư vấn';
@@ -60,11 +61,11 @@ function Consultation() {
     },
     {
       key: 'customer_email',
-      title: 'Địa chỉ email'
+      title: 'Địa chỉ email',
     },
     {
       key: 'school_year',
-      title: 'Năm dự định học'
+      title: 'Năm dự định học',
     },
     {
       key: 'school',
@@ -76,23 +77,23 @@ function Consultation() {
     },
     {
       key: 'level',
-      title: 'Trình độ theo học'
+      title: 'Trình độ theo học',
     },
     {
       key: 'country',
-      title: 'Quốc gia'
+      title: 'Quốc gia',
     },
     {
       key: 'finance',
-      title: 'Khả năng tài chính'
+      title: 'Khả năng tài chính',
     },
     {
       key: 'schoolarship',
-      title: 'Yêu câù về học bổng'
+      title: 'Yêu câù về học bổng',
     },
     {
       key: 'note',
-      title: 'Ghi chú'
+      title: 'Ghi chú',
     },
     {
       key: 'status',
@@ -172,14 +173,18 @@ function Consultation() {
     getListStaff();
     // eslint-disable-next-line
   }, []);
-  const getListConsultation = async () => {
-    const data = await getRequest('/api/consultation/list');
+  const getListConsultation = async (page = 1) => {
+    const data = await getRequest(`/api/consultation/list?page=${page}&limit=10`);
     data.data.data = data.data.data.map((item) => ({
       ...item,
       status: statusMapping[item.status],
     }));
     setItem(data.data.data);
+    setTotalPage(data.data.paginate.total_page)
   };
+  const onPageChange = (page)=>{
+    getListConsultation(page)
+  }
   const getListStaff = async () => {
     const data = await getRequest(
       `/api/staff/list-staff?role=${ADMISSION_OFFICER}`,
@@ -199,6 +204,9 @@ function Consultation() {
       </button>
       <Content>
         <BaseTable headers={headers} actions={action} items={items} />
+        <div className='flex items-center justify-end mt-7'>
+          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        </div>
       </Content>
       <BaseConfirmDialog
         title="Remove consultation"

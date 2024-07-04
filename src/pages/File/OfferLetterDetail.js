@@ -72,8 +72,10 @@ function OfferLetterDetail() {
               <div className="col-span-1 ml-[20px]">
                 <div className="py-1">
                   <span className="font-medium mr-3">Nhân viên xử lý :</span>
-                  {infomation.staff.map((item,index)=>(
-                    <div key={index} className='ml-6'>{item.email}</div>
+                  {infomation.staff.map((item, index) => (
+                    <div key={index} className="ml-6">
+                      {item.email}
+                    </div>
                   ))}
                 </div>
                 <div className="py-1">

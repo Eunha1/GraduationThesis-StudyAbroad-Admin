@@ -9,10 +9,12 @@ import { ADMIN, ADMISSION_OFFICER, EDU_COUNSELLOR } from '../../utils/Constant';
 import { toast } from 'react-toastify';
 import { EventEmitter } from 'events';
 import BaseConfirmDialog from '../../components/BaseConfirmDialog';
+import BasePagination from '../../components/BasePagination';
 function VisaDetail() {
   const [items, setItem] = useState();
   const [open, setOpen] = useState(false);
   const [idVisa, setIdVisa] = useState();
+  const [totalPage, setTotalPage] = useState()
   const title = 'Visa';
   const listBreadcrumb = [
     {
@@ -51,12 +53,14 @@ function VisaDetail() {
   useEffect(() => {
     getListRecordVisa();
   }, []);
-  const getListRecordVisa = async () => {
-    const data = await getRequest('/api/file/record/visa');
-    if (data.status === 1) {
-      setItem(data.data);
-    }
+  const getListRecordVisa = async (page=1) => {
+    const data = await getRequest(`/api/file/record/visa?page=${page}&limit=10`);
+    setItem(data.data.data)
+    setTotalPage(data.data.paginate.total_page)
   };
+  const onPageChange = (page)=>{
+    getListRecordVisa(page)
+  }
   const navigate = useNavigate();
   const handleView = (id) => {
     navigate(`/record/visa/${id}`);
@@ -110,6 +114,9 @@ function VisaDetail() {
       </button>
       <Content>
         <BaseTable headers={headers} items={items} actions={action}></BaseTable>
+        <div className='flex items-center justify-end mt-7'>
+          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        </div>
       </Content>
       <BaseConfirmDialog
         title="Remove Visa"

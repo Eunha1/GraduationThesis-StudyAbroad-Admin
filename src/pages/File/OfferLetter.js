@@ -10,10 +10,12 @@ import { toast } from 'react-toastify';
 import { checkRoles } from '../../utils/Authen';
 import { EventEmitter } from 'events';
 import BaseConfirmDialog from '../../components/BaseConfirmDialog';
+import BasePagination from '../../components/BasePagination';
 function OfferLetter() {
   const [items, setItem] = useState();
   const [open, setOpen] = useState(false);
   const [idOffer, setIdOffer] = useState();
+  const [totalPage, setTotalPage] = useState()
   const title = 'Hồ sơ thư mời';
   const listBreadcrumb = [
     {
@@ -59,6 +61,7 @@ function OfferLetter() {
   const event = new EventEmitter();
   useEffect(() => {
     getListOfferLetter();
+    // eslint-disable-next-line
   }, []);
   const statusMapping = {
     0: 'Chưa đủ hồ sơ',
@@ -66,14 +69,18 @@ function OfferLetter() {
     2: 'Đã xin gửi thư mời',
     3: 'Đã có thư mời',
   };
-  const getListOfferLetter = async () => {
-    const data = await getRequest('/api/file/offer-letter-file');
+  const getListOfferLetter = async (page = 1) => {
+    const data = await getRequest(`/api/file/offer-letter-file?page=${page}&limit=10`);
     data.data.data = data.data.data.map((item) => ({
       ...item,
       status: statusMapping[item.status],
     }));
     setItem(data.data.data);
+    setTotalPage(data.data.paginate.total_page)
   };
+  const onPageChange = (page)=>{
+    getListOfferLetter(page)
+  }
   const navigate = useNavigate();
   const handleView = (id) => {
     navigate(`/offer-letter/${id}`);
@@ -133,6 +140,9 @@ function OfferLetter() {
       )}
       <Content>
         <BaseTable headers={headers} items={items} actions={action}></BaseTable>
+        <div className='flex items-center justify-end mt-7'>
+          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        </div>
       </Content>
       <BaseConfirmDialog
         title="Remove file"

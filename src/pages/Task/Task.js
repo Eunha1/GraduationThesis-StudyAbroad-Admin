@@ -19,11 +19,13 @@ import {
 } from '@mui/material';
 import { toast } from 'react-toastify';
 import { checkRoles } from '../../utils/Authen';
+import BasePagination from '../../components/BasePagination';
 
 function Task() {
   const [data, setData] = useState();
   const [open, setOpen] = useState(false);
   const [taskID, setTaskID] = useState();
+  const [totalPage, setTotalPage] = useState()
   const title = 'Nhiệm vụ';
   const listBreadcrumb = [
     {
@@ -171,8 +173,8 @@ function Task() {
     }
     // eslint-disable-next-line
   }, []);
-  const getListTask = async () => {
-    const data = await getRequest('/api/task/get-task');
+  const getListTask = async (page=1) => {
+    const data = await getRequest(`/api/task/get-task?page=${page}&limit=10`);
     data.data.data = data.data.data.map((item) => ({
       ...item,
       taskStatus: statusTask[item.status],
@@ -180,9 +182,11 @@ function Task() {
       status: convertStatus[item.task.status],
     }));
     setData(data.data.data);
+    setTotalPage(data.data.paginate.total_page)
   };
-  const getListTaskConsultation = async () => {
-    const data = await getRequest('/api/task/task-for-consultation');
+  
+  const getListTaskConsultation = async (page=1) => {
+    const data = await getRequest(`/api/task/task-for-consultation?page=${page}&limit=10`);
     data.data.data = data.data.data.map((item) => ({
       ...item,
       taskStatus: statusTask[item.status],
@@ -190,7 +194,15 @@ function Task() {
       status: consultationStatus[item.task.status],
     }));
     setData(data.data.data);
+    setTotalPage(data.data.paginate.total_page)
   };
+  const onPageChange = (page)=>{
+    if(checkRoles(EDU_COUNSELLOR)){
+      getListTask(page)
+    }else{
+      getListTaskConsultation(page)
+    }
+  }
   const handleConfirm = (id) => {
     setOpen(true);
     setTaskID(id);
@@ -262,6 +274,10 @@ function Task() {
             actions={actions}
           ></BaseTable>
         )}
+        <div className='flex items-center justify-end mt-7'>
+          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        </div>
+
       </Content>
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Xác nhận nhiệm vụ</DialogTitle>

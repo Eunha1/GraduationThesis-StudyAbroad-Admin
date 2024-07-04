@@ -19,12 +19,14 @@ import { toast } from 'react-toastify';
 import { ADMIN } from '../../utils/Constant';
 import BaseConfirmDialog from '../../components/BaseConfirmDialog';
 import { EventEmitter } from 'events';
+import BasePagination from '../../components/BasePagination';
 function Banner() {
   const [open, setOpen] = useState(false);
   const [banner, setBanner] = useState();
   const [data, setData] = useState();
   const [openDelete, setOpenDelete] = useState(false);
   const [Id, setId] = useState();
+  const [totalPage, setTotalPage] = useState()
   const event = new EventEmitter();
   const title = 'Banner';
   const listBreadcrumb = [
@@ -67,15 +69,20 @@ function Banner() {
   };
   useEffect(() => {
     getList();
+    // eslint-disable-next-line
   }, []);
-  const getList = async () => {
-    const data = await getRequest('/api/home-manager/list-banner');
-    data.data = data.data.map((item) => ({
+  const getList = async (page = 1) => {
+    const data = await getRequest(`/api/home-manager/list-banner?page=${page}&limit=10`);
+    data.data.data = data.data.data.map((item) => ({
       ...item,
       type: typeBannerMapping[item.type],
     }));
-    setData(data.data);
+    setData(data.data.data);
+    setTotalPage(data.data.paginate.total_page)
   };
+  const onPageChange = (page)=>{
+    getList(page)
+  }
   event.addListener('RemoveItem', async () => {
     const data = await postRequest(`/api/home-manager/delete-banner/${Id}`);
     if (data.status === 1) {
@@ -215,6 +222,9 @@ function Banner() {
       </Dialog>
       <Content>
         <BaseTable headers={headers} items={data} actions={action}></BaseTable>
+        <div className='flex items-center justify-end mt-7'>
+          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        </div>
       </Content>
       <BaseConfirmDialog
         title="Remove banner"

@@ -19,11 +19,13 @@ import { useFormik } from 'formik';
 import BaseConfirmDialog from '../../components/BaseConfirmDialog';
 import { EventEmitter } from 'events';
 import { sanitizeTitle } from '../../utils/Convert';
+import BasePagination from '../../components/BasePagination';
 function Category() {
   const [items, setItem] = useState();
   const [open, setOpen] = useState(false);
   const [idCategory, setIdCategory] = useState();
   const [openAdd, setOpenAdd] = useState(false);
+  const [totalPage, setTotalPage] = useState()
   const event = new EventEmitter();
   const title = 'Danh sách category';
   const listBreadcrumb = [
@@ -82,10 +84,15 @@ function Category() {
   useEffect(() => {
     getListCategory();
   }, []);
-  const getListCategory = async () => {
-    const data = await getRequest('/api/list-category');
-    setItem(data.data);
+  const getListCategory = async (page = 1) => {
+    const data = await getRequest(`/api/list-category?page=${page}&limit=10`);
+    setItem(data.data.data);
+    setTotalPage(data.data.paginate.total_page)
   };
+
+  const onPageChange = (page)=>{
+    getListCategory(page)
+  }
   const handleCloseAdd = () => {
     setOpenAdd(false);
   };
@@ -196,6 +203,9 @@ function Category() {
       </Dialog>
       <Content>
         <BaseTable headers={headers} items={items} actions={action} />
+        <div className='flex items-center justify-end mt-7'>
+          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        </div>
       </Content>
       <BaseConfirmDialog
         title="Remove category"

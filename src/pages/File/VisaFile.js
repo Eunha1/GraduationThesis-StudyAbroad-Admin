@@ -10,10 +10,12 @@ import { toast } from 'react-toastify';
 import { checkRoles } from '../../utils/Authen';
 import { EventEmitter } from 'events';
 import BaseConfirmDialog from '../../components/BaseConfirmDialog';
+import BasePagination from '../../components/BasePagination';
 function VisaFile() {
   const [items, setItem] = useState();
   const [open, setOpen] = useState(false);
   const [idVisa, setIdVisa] = useState();
+  const [totalPage, setTotalPage] = useState()
   const title = 'Hồ sơ Visa';
   const listBreadcrumb = [
     {
@@ -65,15 +67,20 @@ function VisaFile() {
   const event = new EventEmitter();
   useEffect(() => {
     getVisaFile();
+    // eslint-disable-next-line
   }, []);
-  const getVisaFile = async () => {
-    const data = await getRequest('/api/file/visa-file');
-    data.data = data.data.map((item) => ({
+  const getVisaFile = async (page = 1) => {
+    const data = await getRequest(`/api/file/visa-file?page=${page}&limit=10`);
+    data.data.data = data.data.data.map((item) => ({
       ...item,
       status: statusMapping[item.status],
     }));
-    setItem(data.data);
+    setItem(data.data.data);
+    setTotalPage(data.data.paginate.total_page)
   };
+  const onPageChange = (page)=>{
+    getVisaFile(page)
+  }
   const navigate = useNavigate();
   const handleView = (id) => {
     navigate(`/visa-file/${id}`);
@@ -131,6 +138,9 @@ function VisaFile() {
       )}
       <Content>
         <BaseTable headers={headers} items={items} actions={action}></BaseTable>
+        <div className='flex items-center justify-end mt-7'>
+          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        </div>
       </Content>
       <BaseConfirmDialog
         title="Remove file"
