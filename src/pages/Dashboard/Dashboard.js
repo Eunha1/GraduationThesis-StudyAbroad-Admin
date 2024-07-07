@@ -11,7 +11,7 @@ import { EventEmitter } from 'events';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 function DashBoard() {
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const [totalPage, setTotalPage] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [open, setOpen] = useState(false);
@@ -52,8 +52,10 @@ function DashBoard() {
   }, []);
   const getListStaff = async (page = 1) => {
     const data = await getRequest(`/api/staff/all-staff?page=${page}&limit=10`);
-    setData(data.data.data);
-    setTotalPage(data.data.paginate.total_page);
+    if(data.status === 1){
+      setData(data.data.data);
+      setTotalPage(data.data.paginate.total_page);
+    }
   };
   const onPageChange = (page) => {
     getListStaff(page);
