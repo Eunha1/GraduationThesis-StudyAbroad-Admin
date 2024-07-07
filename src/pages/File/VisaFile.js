@@ -15,7 +15,8 @@ function VisaFile() {
   const [items, setItem] = useState();
   const [open, setOpen] = useState(false);
   const [idVisa, setIdVisa] = useState();
-  const [totalPage, setTotalPage] = useState()
+  const [totalPage, setTotalPage] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
   const title = 'Hồ sơ Visa';
   const listBreadcrumb = [
     {
@@ -63,6 +64,7 @@ function VisaFile() {
     1: 'Đã đủ hồ sơ',
     2: 'Đã xin visa',
     3: 'Đã có visa',
+    4: 'Trượt visa'
   };
   const event = new EventEmitter();
   useEffect(() => {
@@ -76,30 +78,32 @@ function VisaFile() {
       status: statusMapping[item.status],
     }));
     setItem(data.data.data);
-    setTotalPage(data.data.paginate.total_page)
+    setTotalPage(data.data.paginate.total_page);
   };
-  const onPageChange = (page)=>{
-    getVisaFile(page)
-  }
+  const onPageChange = (page) => {
+    getVisaFile(page);
+    setCurrentPage(page);
+  };
   const navigate = useNavigate();
-  const handleView = (id) => {
-    navigate(`/visa-file/${id}`);
+  const handleView = (item) => {
+    navigate(`/visa-file/${item._id}`);
   };
-  const handleEdit = (id) => {
-    navigate(`/visa/update-file/${id}`);
+  const handleEdit = (item) => {
+    navigate(`/visa/update-file/${item._id}`);
   };
   event.addListener('RemoveItem', async () => {
     const data = await postRequest(`/api/file/delete/visa-file/${idVisa}`);
     if (data.status === 1) {
       toast.success(data.message);
+      setCurrentPage(1);
       getVisaFile();
     } else {
       toast.error(data.message);
     }
   });
-  const handleDelete = async (id) => {
+  const handleDelete = async (item) => {
     setOpen(true);
-    setIdVisa(id);
+    setIdVisa(item._id);
   };
   const action = [
     {
@@ -138,8 +142,12 @@ function VisaFile() {
       )}
       <Content>
         <BaseTable headers={headers} items={items} actions={action}></BaseTable>
-        <div className='flex items-center justify-end mt-7'>
-          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        <div className="flex items-center justify-end mt-7">
+          <BasePagination
+            totalPage={totalPage}
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+          ></BasePagination>
         </div>
       </Content>
       <BaseConfirmDialog

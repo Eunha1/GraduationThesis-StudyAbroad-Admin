@@ -14,7 +14,8 @@ function OfferLetterRecordDetail() {
   const [items, setItem] = useState();
   const [open, setOpen] = useState(false);
   const [idOffer, setIdOffer] = useState();
-  const [totalPage, setTotalPage] = useState()
+  const [totalPage, setTotalPage] = useState();
+  const [currentPage, setCurrentPage] = useState();
   const title = 'Thư mời';
   const listBreadcrumb = [
     {
@@ -54,19 +55,22 @@ function OfferLetterRecordDetail() {
     getListRecordOfferLetter();
   }, []);
   const getListRecordOfferLetter = async (page = 1) => {
-    const data = await getRequest(`/api/file/record/offer-letter?page=${page}&limit=10`);
-    setItem(data.data.data)
-    setTotalPage(data.data.paginate.total_page)
+    const data = await getRequest(
+      `/api/file/record/offer-letter?page=${page}&limit=10`,
+    );
+    setItem(data.data.data);
+    setTotalPage(data.data.paginate.total_page);
   };
-  const onPageChange = (page)=>{
-    getListRecordOfferLetter(page)
-  }
+  const onPageChange = (page) => {
+    getListRecordOfferLetter(page);
+    setCurrentPage(page);
+  };
   const navigate = useNavigate();
-  const handleView = (id) => {
-    navigate(`/record/offer-letter/${id}`);
+  const handleView = (item) => {
+    navigate(`/record/offer-letter/${item._id}`);
   };
-  const handleEdit = (id) => {
-    navigate(`/record/update-offer-letter/${id}`);
+  const handleEdit = (item) => {
+    navigate(`/record/update-offer-letter/${item._id}`);
   };
   event.addListener('RemoveItem', async () => {
     const data = await postRequest(
@@ -74,15 +78,16 @@ function OfferLetterRecordDetail() {
     );
     if (data.status === 1) {
       toast.success(data.message);
+      setCurrentPage(1);
       getListRecordOfferLetter();
     } else {
       toast.error(data.message);
     }
     setOpen(false);
   });
-  const handleDelete = (id) => {
+  const handleDelete = (item) => {
     setOpen(true);
-    setIdOffer(id);
+    setIdOffer(item._id);
   };
   const action = [
     {
@@ -117,8 +122,12 @@ function OfferLetterRecordDetail() {
       </button>
       <Content>
         <BaseTable headers={headers} items={items} actions={action}></BaseTable>
-        <div className='flex items-center justify-end mt-7'>
-          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        <div className="flex items-center justify-end mt-7">
+          <BasePagination
+            totalPage={totalPage}
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+          ></BasePagination>
         </div>
       </Content>
       <BaseConfirmDialog

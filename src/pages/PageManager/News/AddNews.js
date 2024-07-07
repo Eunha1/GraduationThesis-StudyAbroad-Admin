@@ -36,11 +36,11 @@ function AddNews() {
   }, []);
   const getListPost = async () => {
     const data = await getRequest('/api/post/list-post');
-    setListPost(data.data);
+    setListPost(data.data.data);
   };
   const getListMenu = async () => {
     const data = await getRequest('/api/menu/list-menu');
-    setListMenu(data.data);
+    setListMenu(data.data.data);
   };
   const handleCancel = () => {
     navigate('/page-manager/news');

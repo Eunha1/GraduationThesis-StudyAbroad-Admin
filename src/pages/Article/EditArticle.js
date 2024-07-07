@@ -103,7 +103,7 @@ function EditArticle() {
   }, []);
   const getListCategory = async () => {
     const data = await getRequest('/api/list-category');
-    setListCategory(data.data);
+    setListCategory(data.data.data);
   };
   const handleContent = (newContent) => {
     setContent(newContent);

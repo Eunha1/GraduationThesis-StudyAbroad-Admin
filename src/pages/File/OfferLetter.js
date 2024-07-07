@@ -15,7 +15,8 @@ function OfferLetter() {
   const [items, setItem] = useState();
   const [open, setOpen] = useState(false);
   const [idOffer, setIdOffer] = useState();
-  const [totalPage, setTotalPage] = useState()
+  const [totalPage, setTotalPage] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
   const title = 'Hồ sơ thư mời';
   const listBreadcrumb = [
     {
@@ -68,25 +69,29 @@ function OfferLetter() {
     1: 'Đã đủ hồ sơ',
     2: 'Đã xin gửi thư mời',
     3: 'Đã có thư mời',
+    4: 'Trượt thư mời'
   };
   const getListOfferLetter = async (page = 1) => {
-    const data = await getRequest(`/api/file/offer-letter-file?page=${page}&limit=10`);
+    const data = await getRequest(
+      `/api/file/offer-letter-file?page=${page}&limit=10`,
+    );
     data.data.data = data.data.data.map((item) => ({
       ...item,
       status: statusMapping[item.status],
     }));
     setItem(data.data.data);
-    setTotalPage(data.data.paginate.total_page)
+    setTotalPage(data.data.paginate.total_page);
   };
-  const onPageChange = (page)=>{
-    getListOfferLetter(page)
-  }
+  const onPageChange = (page) => {
+    getListOfferLetter(page);
+    setCurrentPage(page);
+  };
   const navigate = useNavigate();
-  const handleView = (id) => {
-    navigate(`/offer-letter/${id}`);
+  const handleView = (item) => {
+    navigate(`/offer-letter/${item._id}`);
   };
-  const handleEdit = (id) => {
-    navigate(`/offer-letter/update-file/${id}`);
+  const handleEdit = (item) => {
+    navigate(`/offer-letter/update-file/${item._id}`);
   };
   event.addListener('RemoveItem', async () => {
     const data = await postRequest(
@@ -94,14 +99,15 @@ function OfferLetter() {
     );
     if (data.status === 1) {
       toast.success(data.message);
+      setCurrentPage(1);
       getListOfferLetter();
     } else {
       toast.error(data.message);
     }
   });
-  const handleDelete = (id) => {
+  const handleDelete = (item) => {
     setOpen(true);
-    setIdOffer(id);
+    setIdOffer(item._id);
   };
   const action = [
     {
@@ -140,8 +146,12 @@ function OfferLetter() {
       )}
       <Content>
         <BaseTable headers={headers} items={items} actions={action}></BaseTable>
-        <div className='flex items-center justify-end mt-7'>
-          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        <div className="flex items-center justify-end mt-7">
+          <BasePagination
+            totalPage={totalPage}
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+          ></BasePagination>
         </div>
       </Content>
       <BaseConfirmDialog

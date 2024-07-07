@@ -14,7 +14,8 @@ function VisaDetail() {
   const [items, setItem] = useState();
   const [open, setOpen] = useState(false);
   const [idVisa, setIdVisa] = useState();
-  const [totalPage, setTotalPage] = useState()
+  const [totalPage, setTotalPage] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
   const title = 'Visa';
   const listBreadcrumb = [
     {
@@ -53,33 +54,37 @@ function VisaDetail() {
   useEffect(() => {
     getListRecordVisa();
   }, []);
-  const getListRecordVisa = async (page=1) => {
-    const data = await getRequest(`/api/file/record/visa?page=${page}&limit=10`);
-    setItem(data.data.data)
-    setTotalPage(data.data.paginate.total_page)
+  const getListRecordVisa = async (page = 1) => {
+    const data = await getRequest(
+      `/api/file/record/visa?page=${page}&limit=10`,
+    );
+    setItem(data.data.data);
+    setTotalPage(data.data.paginate.total_page);
   };
-  const onPageChange = (page)=>{
-    getListRecordVisa(page)
-  }
+  const onPageChange = (page) => {
+    getListRecordVisa(page);
+    setCurrentPage(page);
+  };
   const navigate = useNavigate();
-  const handleView = (id) => {
-    navigate(`/record/visa/${id}`);
+  const handleView = (item) => {
+    navigate(`/record/visa/${item._id}`);
   };
-  const handleEdit = (id) => {
-    navigate(`/record/update-visa/${id}`);
+  const handleEdit = (item) => {
+    navigate(`/record/update-visa/${item._id}`);
   };
   event.addListener('RemoveItem', async () => {
     const data = await postRequest(`/api/file/delete/visa-record/${idVisa}`);
     if (data.status === 1) {
       toast.success(data.message);
+      setCurrentPage(1);
       getListRecordVisa();
     } else {
       toast.error(data.message);
     }
   });
-  const handleDelete = (id) => {
+  const handleDelete = (item) => {
     setOpen(true);
-    setIdVisa(id);
+    setIdVisa(item._id);
   };
   const action = [
     {
@@ -114,8 +119,12 @@ function VisaDetail() {
       </button>
       <Content>
         <BaseTable headers={headers} items={items} actions={action}></BaseTable>
-        <div className='flex items-center justify-end mt-7'>
-          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        <div className="flex items-center justify-end mt-7">
+          <BasePagination
+            totalPage={totalPage}
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+          ></BasePagination>
         </div>
       </Content>
       <BaseConfirmDialog

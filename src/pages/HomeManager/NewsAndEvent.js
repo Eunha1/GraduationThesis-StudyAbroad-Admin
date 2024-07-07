@@ -27,7 +27,8 @@ function NewsAndEvent() {
   const [listPost, setListPost] = useState();
   const [openDelete, setOpenDelete] = useState(false);
   const [idPost, setIdPost] = useState();
-  const [totalPage, setTotalPage] = useState()
+  const [totalPage, setTotalPage] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
   const event = new EventEmitter();
   const title = 'Tin tức và sự kiện';
   const listBreadcrumb = [
@@ -69,14 +70,15 @@ function NewsAndEvent() {
     );
     if (data.status === 1) {
       toast.success(data.message);
+      setCurrentPage(1);
       getList();
     } else {
       toast.error(data.message);
     }
   });
-  const handleDelete = (id) => {
+  const handleDelete = (item) => {
     setOpenDelete(true);
-    setIdPost(id);
+    setIdPost(item._id);
   };
   const action = [
     {
@@ -92,17 +94,20 @@ function NewsAndEvent() {
     // eslint-disable-next-line
   }, []);
   const getList = async (page = 1) => {
-    const data = await getRequest(`/api/home-manager/news-and-event/list?page=${page}&limit=10`);
+    const data = await getRequest(
+      `/api/home-manager/news-and-event/list?page=${page}&limit=10`,
+    );
     data.data.data = data.data.data.map((item) => ({
       ...item,
       type: typeMapping[item.type],
     }));
     setData(data.data.data);
-    setTotalPage(data.data.paginate.total_page)
+    setTotalPage(data.data.paginate.total_page);
   };
-  const onPageChange = (page)=>{
-    getList(page)
-  }
+  const onPageChange = (page) => {
+    getList(page);
+    setCurrentPage(page);
+  };
   const validationSchema = yup.object({
     type: yup.string('Choose type').required('Type is required'),
     post_id: yup.string('Choose post').required('Post is required'),
@@ -124,6 +129,7 @@ function NewsAndEvent() {
       );
       if (data.status === 1) {
         toast.success(data.message);
+        setCurrentPage(1);
         getList();
         setOpen(false);
       } else {
@@ -234,8 +240,12 @@ function NewsAndEvent() {
       </Dialog>
       <Content>
         <BaseTable headers={headers} actions={action} items={data}></BaseTable>
-        <div className='flex items-center justify-end mt-7'>
-          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        <div className="flex items-center justify-end mt-7">
+          <BasePagination
+            totalPage={totalPage}
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+          ></BasePagination>
         </div>
       </Content>
       <BaseConfirmDialog

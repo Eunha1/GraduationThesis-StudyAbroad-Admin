@@ -39,11 +39,11 @@ function AddMenu() {
   }, []);
   const getListMenu = async () => {
     const data = await getRequest('/api/menu/list-menu');
-    setListMenu(data.data);
+    setListMenu(data.data.data);
   };
   const getListCategory = async () => {
     const data = await getRequest('/api/list-category');
-    setListCategory(data.data);
+    setListCategory(data.data.data);
   };
   const validationSchema = yup.object({
     name: yup.string('Enter menu name').required('Name is required'),

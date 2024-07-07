@@ -47,7 +47,7 @@ function BaseTable({ headers, items, actions }) {
                               {checkRoles(action.role) ? (
                                 <div
                                   className="p-1"
-                                  onClick={() => action.event(item._id)}
+                                  onClick={() => action.event(item)}
                                 >
                                   {action.component}
                                 </div>

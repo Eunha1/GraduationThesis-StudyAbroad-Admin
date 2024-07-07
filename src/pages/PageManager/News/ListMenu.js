@@ -4,11 +4,14 @@ import Content from '../../../components/Content';
 import { getRequest } from '../../../services/Api';
 import BaseTable from '../../../components/BaseTable';
 import { ADMIN } from '../../../utils/Constant';
-import { DeleteIcon, PencilIcon } from '../../../asset/images/icons';
+import { PencilIcon } from '../../../asset/images/icons';
 import { useNavigate } from 'react-router-dom';
+import BasePagination from '../../../components/BasePagination';
 function ListMenu() {
   const navigate = useNavigate();
   const [data, setData] = useState();
+  const [totalPage, setTotalPage] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
   const title = 'Danh mục tin tức';
   const listBreadcrumb = [
     {
@@ -38,24 +41,22 @@ function ListMenu() {
   useEffect(() => {
     getListMenu();
   }, []);
-  const getListMenu = async () => {
-    const data = await getRequest('/api/menu/list-menu');
-    setData(data.data);
+  const getListMenu = async (page = 1) => {
+    const data = await getRequest(`/api/menu/list-menu?page=${page}&limit=10`);
+    setData(data.data.data);
+    setTotalPage(data.data.paginate.total_page);
   };
-  const handleEdit = (id) => {};
+  const onPageChange = (page) => {
+    getListMenu(page);
+    setCurrentPage(page);
+  };
+  const handleEdit = (item) => {};
 
-  const handleDelete = (id) => {};
   const action = [
     {
       key: 'edit-file',
       component: <PencilIcon />,
       event: handleEdit,
-      role: [ADMIN],
-    },
-    {
-      key: 'delete-file',
-      component: <DeleteIcon />,
-      event: handleDelete,
       role: [ADMIN],
     },
   ];
@@ -73,6 +74,13 @@ function ListMenu() {
       </button>
       <Content>
         <BaseTable headers={headers} items={data} actions={action}></BaseTable>
+        <div className="flex items-center justify-end mt-7">
+          <BasePagination
+            totalPage={totalPage}
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+          ></BasePagination>
+        </div>
       </Content>
     </div>
   );

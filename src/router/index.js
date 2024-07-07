@@ -39,6 +39,7 @@ import NewsAndEvent from '../pages/HomeManager/NewsAndEvent';
 import Testimonial from '../pages/HomeManager/Testimonial';
 import TestimonialDetail from '../pages/HomeManager/TestimonialDetail';
 import Task from '../pages/Task/Task';
+import AccountDetail from '../pages/Dashboard/AccountDetail';
 export const PRIVATE_ROUTER = [
   {
     key: 'home',
@@ -50,7 +51,13 @@ export const PRIVATE_ROUTER = [
     key: 'dashboard ',
     path: '/dashboard',
     element: <DashBoard />,
-    role: [ADMIN, EDU_COUNSELLOR, ADMISSION_OFFICER],
+    role: [ADMIN],
+  },
+  {
+    key: 'new-account',
+    path: '/new-account',
+    element: <AccountDetail />,
+    role: [ADMIN],
   },
   { key: 'article', path: '/article', element: <Article />, role: [ADMIN] },
   {

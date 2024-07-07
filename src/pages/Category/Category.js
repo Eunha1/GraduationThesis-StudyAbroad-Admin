@@ -25,7 +25,8 @@ function Category() {
   const [open, setOpen] = useState(false);
   const [idCategory, setIdCategory] = useState();
   const [openAdd, setOpenAdd] = useState(false);
-  const [totalPage, setTotalPage] = useState()
+  const [totalPage, setTotalPage] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
   const event = new EventEmitter();
   const title = 'Danh sách category';
   const listBreadcrumb = [
@@ -50,7 +51,7 @@ function Category() {
     },
     {
       key: 'slug',
-      title: 'slug',
+      title: 'Key',
     },
     {
       key: 'action',
@@ -62,15 +63,15 @@ function Category() {
     const data = await postRequest(`/api/category/delete/${idCategory}`);
     if (data.status === 1) {
       toast.success(data.message);
-      getListCategory();
+      getListCategory(currentPage);
     } else {
       toast.error(data.message);
     }
   });
   // action
-  const handleDelete = (id) => {
+  const handleDelete = (item) => {
     setOpen(true);
-    setIdCategory(id);
+    setIdCategory(item._id);
   };
   const action = [
     {
@@ -87,12 +88,13 @@ function Category() {
   const getListCategory = async (page = 1) => {
     const data = await getRequest(`/api/list-category?page=${page}&limit=10`);
     setItem(data.data.data);
-    setTotalPage(data.data.paginate.total_page)
+    setTotalPage(data.data.paginate.total_page);
   };
 
-  const onPageChange = (page)=>{
-    getListCategory(page)
-  }
+  const onPageChange = (page) => {
+    getListCategory(page);
+    setCurrentPage(page);
+  };
   const handleCloseAdd = () => {
     setOpenAdd(false);
   };
@@ -114,6 +116,7 @@ function Category() {
       });
       if (data.status === 1) {
         toast.success(data.message);
+        setCurrentPage(1);
         getListCategory();
       } else {
         toast.error(data.message);
@@ -168,14 +171,14 @@ function Category() {
                 htmlFor="slug"
                 className="col-span-1 mr-2 font-Inter font-medium"
               >
-                Slug
+                Key
               </label>
               <TextField
                 className="col-span-3"
                 variant="outlined"
                 type="text"
                 name="slug"
-                placeholder="Enter slug"
+                placeholder="Enter key"
                 size="small"
                 value={formik.values.slug}
                 onChange={formik.handleChange}
@@ -203,8 +206,12 @@ function Category() {
       </Dialog>
       <Content>
         <BaseTable headers={headers} items={items} actions={action} />
-        <div className='flex items-center justify-end mt-7'>
-          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        <div className="flex items-center justify-end mt-7">
+          <BasePagination
+            totalPage={totalPage}
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+          ></BasePagination>
         </div>
       </Content>
       <BaseConfirmDialog

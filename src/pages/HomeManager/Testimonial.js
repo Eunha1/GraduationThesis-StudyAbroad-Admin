@@ -9,12 +9,15 @@ import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import BaseConfirmDialog from '../../components/BaseConfirmDialog';
 import { EventEmitter } from 'events';
+import BasePagination from '../../components/BasePagination';
 function Testimonial() {
   const navigate = useNavigate();
   const [data, setData] = useState();
   const event = new EventEmitter();
   const [open, setOpen] = useState(false);
   const [Id, setId] = useState();
+  const [totalPage, setTotalPage] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
   const title = 'Đánh giá của học sinh';
   const listBreadcrumb = [
     {
@@ -53,8 +56,8 @@ function Testimonial() {
       key: 'action',
     },
   ];
-  const handleEdit = (id) => {
-    navigate(`/home-manager/testimonial/edit/${id}`);
+  const handleEdit = (item) => {
+    navigate(`/home-manager/testimonial/edit/${item._id}`);
   };
   event.addListener('RemoveItem', async () => {
     const data = await postRequest(
@@ -62,14 +65,15 @@ function Testimonial() {
     );
     if (data.status === 1) {
       toast.success(data.message);
+      setCurrentPage(1);
       getListTestimonial();
     } else {
       toast.error(data.message);
     }
   });
-  const handleDelete = (id) => {
+  const handleDelete = (item) => {
     setOpen(true);
-    setId(id);
+    setId(item._id);
   };
   const action = [
     {
@@ -88,9 +92,16 @@ function Testimonial() {
   useEffect(() => {
     getListTestimonial();
   }, []);
-  const getListTestimonial = async () => {
-    const data = await getRequest('/api/home-manager/list-testimonial');
-    setData(data.data);
+  const getListTestimonial = async (page = 1) => {
+    const data = await getRequest(
+      `/api/home-manager/list-testimonial?page=${page}&limit=10`,
+    );
+    setData(data.data.data);
+    setTotalPage(data.data.paginate.total_page);
+  };
+  const onPageChange = (page) => {
+    getListTestimonial(page);
+    setCurrentPage(page);
   };
   return (
     <div>
@@ -105,6 +116,13 @@ function Testimonial() {
       </button>
       <Content>
         <BaseTable headers={headers} items={data} actions={action}></BaseTable>
+        <div className="flex items-center justify-end mt-7">
+          <BasePagination
+            totalPage={totalPage}
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+          ></BasePagination>
+        </div>
       </Content>
       <BaseConfirmDialog
         title="Xoá đánh giá"

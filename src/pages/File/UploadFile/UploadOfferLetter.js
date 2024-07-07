@@ -59,6 +59,7 @@ function UploadOfferLetterFile() {
     { id: 1, status: 'Đã đủ hồ sơ' },
     { id: 2, status: 'Đã xin gửi thư mời' },
     { id: 3, status: 'Đã có thư mời' },
+    { id: 4, status: 'Trượt xin thư mời'}
   ];
   const formik = useFormik({
     initialValues: {

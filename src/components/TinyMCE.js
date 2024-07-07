@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 function TinyMCE({ initialValue, handleData }) {
   const editorRef = useRef(initialValue);
   const init = {
-    height: 300,
+    height: 500,
     statusbar: false,
     selector: 'textarea',
     plugins:

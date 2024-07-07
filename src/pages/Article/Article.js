@@ -14,7 +14,8 @@ function Article() {
   const [item, setItem] = useState();
   const [open, setOpen] = useState(false);
   const [idArticle, setIdArticle] = useState();
-  const [totalPage, setTotalPage] = useState()
+  const [totalPage, setTotalPage] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
   const header = [
     {
       key: 'stt',
@@ -56,24 +57,26 @@ function Article() {
   ];
   const event = new EventEmitter();
   const navigate = useNavigate();
-  const onPageChange = (page)=>{
-    getListPost(page)
-  }
-  const handleEdit = (id) => {
-    navigate(`/article/update/${id}`);
+  const onPageChange = (page) => {
+    getListPost(page);
+    setCurrentPage(page);
+  };
+  const handleEdit = (item) => {
+    navigate(`/article/update/${item._id}`);
   };
   event.addListener('RemoveItem', async () => {
     const data = await postRequest(`/api/delete-post/${idArticle}`);
     if (data.status === 1) {
       toast.success(data.message);
+      setCurrentPage(1);
       getListPost();
     } else {
       toast.error(data.message);
     }
   });
-  const handleDelete = async (id) => {
+  const handleDelete = (item) => {
     setOpen(true);
-    setIdArticle(id);
+    setIdArticle(item._id);
   };
   const action = [
     {
@@ -94,8 +97,8 @@ function Article() {
   }, []);
   const getListPost = async (page = 1) => {
     const data = await getRequest(`/api/post/list-post?page=${page}&limit=10`);
-    setItem(data.data.data)
-    setTotalPage(data.data.paginate.total_page)
+    setItem(data.data.data);
+    setTotalPage(data.data.paginate.total_page);
   };
   return (
     <div>
@@ -110,8 +113,12 @@ function Article() {
       </button>
       <Content>
         <BaseTable headers={header} items={item} actions={action}></BaseTable>
-        <div className='flex items-center justify-end mt-7'>
-          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        <div className="flex items-center justify-end mt-7">
+          <BasePagination
+            totalPage={totalPage}
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+          ></BasePagination>
         </div>
       </Content>
       <BaseConfirmDialog

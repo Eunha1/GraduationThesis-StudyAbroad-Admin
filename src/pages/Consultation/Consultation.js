@@ -1,13 +1,10 @@
 import BaseTable from '../../components/BaseTable';
 import Breadcrumb from '../../components/Breadcrumb';
 import Content from '../../components/Content';
-import {
-  PencilIcon,
-  DeleteIcon,
-  AssignTask,
-} from '../../asset/images/icons';
+import { PencilIcon, DeleteIcon, AssignTask } from '../../asset/images/icons';
 import {
   ADMISSION_OFFICER,
+  CONSULTATION_EVALUATE,
   CONSULTATION_STATUS,
   EDU_COUNSELLOR,
 } from '../../utils/Constant';
@@ -31,7 +28,8 @@ function Consultation() {
   const [idConsultation, setIdConsultation] = useState();
   const [listStaff, setListStaff] = useState();
   const [staffID, setStaffID] = useState();
-  const [totalPage, setTotalPage] = useState()
+  const [totalPage, setTotalPage] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
   const event = new EventEmitter();
   const navigate = useNavigate();
   const title = 'Thông tin tư vấn';
@@ -96,6 +94,10 @@ function Consultation() {
       title: 'Ghi chú',
     },
     {
+      key: 'evaluate',
+      title: 'Đánh giá'
+    },
+    {
       key: 'status',
       title: 'Trạng thái',
     },
@@ -105,12 +107,12 @@ function Consultation() {
     },
   ];
 
-  const handleEdit = (id) => {
-    navigate(`/consultation/update/${id}`);
+  const handleEdit = (item) => {
+    navigate(`/consultation/update/${item._id}`);
   };
-  const handleAssign = (id) => {
+  const handleAssign = (item) => {
     setOpenAssign(true);
-    setIdConsultation(id);
+    setIdConsultation(item._id);
   };
   const handleClose = () => {
     setOpenAssign(false);
@@ -120,7 +122,7 @@ function Consultation() {
       receiver: staffID,
       task: idConsultation,
     };
-    const data = await postRequest('/api/task/create', body);
+    const data = await postRequest('/api/task/create/for-consultation', body);
     if (data.status === 1) {
       toast.success(data.message);
       setOpenAssign(false);
@@ -135,14 +137,15 @@ function Consultation() {
     );
     if (data.status === 1) {
       toast.success(data.message);
+      setCurrentPage(1);
       getListConsultation();
     } else {
       toast.error(data.message);
     }
   });
-  const handleDelete = (id) => {
+  const handleDelete = (item) => {
     setOpen(true);
-    setIdConsultation(id);
+    setIdConsultation(item._id);
   };
   const action = [
     {
@@ -164,27 +167,37 @@ function Consultation() {
       role: [EDU_COUNSELLOR],
     },
   ];
-  const statusMapping = {
-    [CONSULTATION_STATUS.POTENTIAL]: 'Tiềm năng',
-    [CONSULTATION_STATUS.NO_POTENTIAL]: 'Không tiềm năng',
+  const evaluateMapping = {
+    [CONSULTATION_EVALUATE.POTENTIAL]: 'Tiềm năng',
+    [CONSULTATION_EVALUATE.NO_POTENTIAL]: 'Không tiềm năng',
   };
+  const statusMapping = {
+    [CONSULTATION_STATUS.NEW]: 'Chưa giao nhiệm vụ',
+    [CONSULTATION_STATUS.WATTING]: 'Chờ xác nhận',
+    [CONSULTATION_STATUS.ACCEPT]: 'Chấp nhận',
+    [CONSULTATION_STATUS.REFUSE]: 'Từ chối'
+  }
   useEffect(() => {
     getListConsultation();
     getListStaff();
     // eslint-disable-next-line
   }, []);
   const getListConsultation = async (page = 1) => {
-    const data = await getRequest(`/api/consultation/list?page=${page}&limit=10`);
+    const data = await getRequest(
+      `/api/consultation/list?page=${page}&limit=10`,
+    );
     data.data.data = data.data.data.map((item) => ({
       ...item,
-      status: statusMapping[item.status],
+      evaluate: evaluateMapping[item.evaluate],
+      status: statusMapping[item.status]
     }));
     setItem(data.data.data);
-    setTotalPage(data.data.paginate.total_page)
+    setTotalPage(data.data.paginate.total_page);
   };
-  const onPageChange = (page)=>{
-    getListConsultation(page)
-  }
+  const onPageChange = (page) => {
+    getListConsultation(page);
+    setCurrentPage(page);
+  };
   const getListStaff = async () => {
     const data = await getRequest(
       `/api/staff/list-staff?role=${ADMISSION_OFFICER}`,
@@ -204,8 +217,12 @@ function Consultation() {
       </button>
       <Content>
         <BaseTable headers={headers} actions={action} items={items} />
-        <div className='flex items-center justify-end mt-7'>
-          <BasePagination totalPage={totalPage} onPageChange={onPageChange}></BasePagination>
+        <div className="flex items-center justify-end mt-7">
+          <BasePagination
+            totalPage={totalPage}
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+          ></BasePagination>
         </div>
       </Content>
       <BaseConfirmDialog

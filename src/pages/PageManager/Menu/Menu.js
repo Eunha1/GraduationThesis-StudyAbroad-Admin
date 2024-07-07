@@ -9,10 +9,13 @@ import BaseConfirmDialog from '../../../components/BaseConfirmDialog';
 import { EventEmitter } from 'events';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import BasePagination from '../../../components/BasePagination';
 function MenuManager() {
   const [data, setData] = useState();
   const [open, setOpen] = useState(false);
   const [idMenu, setIdMenu] = useState();
+  const [totalPage, setTotalPage] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
   const event = new EventEmitter();
   const navigate = useNavigate();
   const title = 'Quản lý menu';
@@ -45,7 +48,7 @@ function MenuManager() {
       key: 'category',
     },
     {
-      title: 'Slug',
+      title: 'Key',
       key: 'slug',
     },
     {
@@ -56,28 +59,34 @@ function MenuManager() {
   useEffect(() => {
     getListMenu();
   }, []);
-  const getListMenu = async () => {
-    const data = await getRequest('/api/menu/list-menu');
-    setData(data.data);
+  const getListMenu = async (page = 1) => {
+    const data = await getRequest(`/api/menu/list-menu?page=${page}&limit=10`);
+    setData(data.data.data);
+    setTotalPage(data.data.paginate.total_page);
+  };
+  const onPageChange = (page) => {
+    getListMenu(page);
+    setCurrentPage(page);
   };
   const handleAdd = () => {
     navigate('/page-manager/add-menu');
   };
-  const handleEdit = (id) => {
-    navigate(`/page-manager/edit-menu/${id}`);
+  const handleEdit = (item) => {
+    navigate(`/page-manager/edit-menu/${item._id}`);
   };
   event.addListener('RemoveItem', async () => {
     const data = await postRequest(`/api/menu/delete-menu/${idMenu}`);
     if (data.status === 1) {
       toast.success(data.message);
+      setCurrentPage(1);
       getListMenu();
     } else {
       toast.error(data.message);
     }
   });
-  const handleDelete = (id) => {
+  const handleDelete = (item) => {
     setOpen(true);
-    setIdMenu(id);
+    setIdMenu(item._id);
   };
   const action = [
     {
@@ -104,6 +113,13 @@ function MenuManager() {
       </button>
       <Content>
         <BaseTable headers={headers} items={data} actions={action}></BaseTable>
+        <div className="flex items-center justify-end mt-7">
+          <BasePagination
+            totalPage={totalPage}
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+          ></BasePagination>
+        </div>
       </Content>
       <BaseConfirmDialog
         title="Remove menu"

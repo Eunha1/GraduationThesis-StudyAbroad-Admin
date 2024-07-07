@@ -41,6 +41,7 @@ function UploadVisaFile() {
     { id: 1, status: 'Đã đủ hồ sơ' },
     { id: 2, status: 'Đã xin visa' },
     { id: 3, status: 'Đã có visa' },
+    { id: 4, status: 'Trượt visa'}
   ];
   const validationSchema = yup.object({
     phone: yup.string('Enter your phone').required('Phone is required'),
