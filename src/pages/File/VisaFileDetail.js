@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import BaseTableImage from '../../components/BaseTableImage';
 import { useEffect, useState } from 'react';
 import { getRequest } from '../../services/Api';
+import { convertDate } from '../../utils/Convert';
 function VisaFileDetail() {
   const { visa_id } = useParams();
   const [infomation, setInfomation] = useState();
@@ -70,21 +71,21 @@ function VisaFileDetail() {
                 </div>
               </div>
               <div className="col-span-1 ml-[20px]">
-                <div className="py-1">
-                  <span className="font-medium mr-3">Tên nhân viên :</span>
-                  {infomation.Staff_name}
-                </div>
-                <div className="py-1">
-                  <span className="font-medium mr-3">Số điện thoại :</span>
-                  {infomation.Staff_phone}
+              <div className="py-1">
+                  <span className="font-medium mr-3">Nhân viên xử lý :</span>
+                  {infomation.staff.map((item, index) => (
+                    <div key={index} className="ml-6">
+                      {item.email}
+                    </div>
+                  ))}
                 </div>
                 <div className="py-1">
                   <span className="font-medium mr-3">Thời gian cập nhật :</span>
-                  {infomation.updated_at}
+                  {convertDate(infomation.updated_at)}
                 </div>
                 <div className="py-1">
                   <span className="font-medium mr-3">Thời gian tạo :</span>
-                  {infomation.created_at}
+                  {convertDate(infomation.created_at)}
                 </div>
               </div>
             </div>

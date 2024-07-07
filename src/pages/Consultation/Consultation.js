@@ -125,6 +125,8 @@ function Consultation() {
     const data = await postRequest('/api/task/create/for-consultation', body);
     if (data.status === 1) {
       toast.success(data.message);
+      setCurrentPage(1)
+      getListConsultation()
       setOpenAssign(false);
     } else {
       toast.error(data.message);

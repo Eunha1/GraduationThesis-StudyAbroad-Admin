@@ -10,6 +10,7 @@ import {
   TASK_STATUS,
   ADMIN,
   CONSULTATION_STATUS,
+  CONSULTATION_EVALUATE,
 } from '../../utils/Constant';
 import BasePagination from '../../components/BasePagination';
 import { ChangeStatusIcon } from '../../asset/images/icons';
@@ -65,7 +66,7 @@ function Assign() {
     },
     {
       key: 'status',
-      title: 'Trạng thái tư vấn',
+      title: 'Trạng thái '
     },
     {
       key: 'taskStatus',
@@ -76,6 +77,60 @@ function Assign() {
       title: 'action',
     },
   ];
+
+  const headers_2 = [
+    {
+      key: 'stt',
+      title: 'STT',
+    },
+    {
+      key: 'receiver',
+      title: 'Người nhận nhiệm vụ',
+    },
+    {
+      key: 'name',
+      title: 'Tên khách hàng',
+    },
+    {
+      key: 'phone',
+      title: 'Số điện thoại',
+    },
+    {
+      key: 'email',
+      title: 'Email',
+    },{
+      key: 'country',
+      title: 'Quốc gia chọn',
+    },
+    {
+      key: 'school_name',
+      title: 'Trường theo học',
+    },
+    {
+      key: 'majors',
+      title: 'Ngành theo học',
+    },
+    {
+      key: 'school_year',
+      title: 'Năm theo học',
+    },
+    {
+      key: 'finance',
+      title: 'Tài chính',
+    },
+    {
+      key: 'note',
+      title: 'Ghi chú',
+    },
+    {
+      key: 'evaluate',
+      title:'Đánh giá'
+    },
+    {
+      key: 'taskStatus',
+      title: 'Trạng thái nhiệm vụ',
+    },
+  ]
   const onPageChange = (page) => {
     getListAdvise(page);
     setCurrentPage(page);
@@ -95,10 +150,16 @@ function Assign() {
     [TASK_STATUS.ACCEPT]: 'Chấp nhận',
     [TASK_STATUS.REFUSE]: 'Từ chối',
   };
-  const consultationStatus = {
-    [CONSULTATION_STATUS.POTENTIAL]: 'Tiềm năng',
-    [CONSULTATION_STATUS.NO_POTENTIAL]: 'Không tiềm năng',
+  const consultationEvaluate = {
+    [CONSULTATION_EVALUATE.POTENTIAL]: 'Tiềm năng',
+    [CONSULTATION_EVALUATE.NO_POTENTIAL]: 'Không tiềm năng',
   };
+  const consultationStatus = {
+    [CONSULTATION_STATUS.NEW]: 'Chưa giao nhiệm vụ',
+    [CONSULTATION_STATUS.WATTING]: 'Chờ xác nhận',
+    [CONSULTATION_STATUS.ACCEPT]: 'Chấp nhận',
+    [CONSULTATION_STATUS.REFUSE]: 'Từ chối'
+  }
   useEffect(() => {
     if (checkRoles(ADMIN)) {
       getListAdvise();
@@ -129,6 +190,7 @@ function Assign() {
       ...item,
       taskStatus: statusTask[item.status],
       ...item.task,
+      evaluate: consultationEvaluate[item.task.evaluate],
       status: consultationStatus[item.task.status],
     }));
     setData(data.data.data);
@@ -172,7 +234,8 @@ function Assign() {
     <div>
       <Breadcrumb title={title} listBreadcrumb={listBreadcrumb} />
       <Content>
-        <BaseTable headers={headers} items={data} actions={action}></BaseTable>
+        {checkRoles(ADMIN) ? <BaseTable headers={headers} items={data} actions={action}></BaseTable> : <BaseTable headers={headers_2} items={data} ></BaseTable>}
+        
         <div className="flex items-center justify-end mt-7">
           <BasePagination
             totalPage={totalPage}

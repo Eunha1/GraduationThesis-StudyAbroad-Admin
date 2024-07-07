@@ -40,7 +40,7 @@ function CreateConsultation() {
       finance: '',
       schoolarship: '',
       note: '',
-      status: '',
+      evaluate: '',
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -199,7 +199,7 @@ function CreateConsultation() {
             </div>
             <div className="cols-span-1 flex flex-col">
               <label htmlFor="status" className="mb-3">
-                Status
+                Đánh giá
               </label>
               <TextField
                 select
@@ -208,9 +208,9 @@ function CreateConsultation() {
                 placeholder="Choose status"
                 size="small"
                 defaultValue=""
-                value={formik.values.status}
+                value={formik.values.evaluate}
                 onChange={(event) =>
-                  formik.setFieldValue('status', event.target.value)
+                  formik.setFieldValue('evaluate', event.target.value)
                 }
               >
                 {listStatus.map((option, index) => (

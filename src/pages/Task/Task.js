@@ -6,6 +6,7 @@ import { getRequest, postRequest } from '../../services/Api';
 import {
   ADMISSION_OFFICER,
   ADVISE_STATUS,
+  CONSULTATION_EVALUATE,
   CONSULTATION_STATUS,
   EDU_COUNSELLOR,
   TASK_STATUS,
@@ -139,9 +140,14 @@ function Task() {
       title: 'Ghi chú',
     },
     {
+      key: 'evaluate',
+      title:'Đánh giá'
+    },
+    {
       key: 'status',
       title: 'Trạng thái tư vấn',
     },
+    
     {
       key: 'taskStatus',
       title: 'Trạng thái nhiệm vụ',
@@ -166,10 +172,16 @@ function Task() {
     [ADVISE_STATUS.UPLOADED_VISA]: 'Đã cập nhật visa',
     [ADVISE_STATUS.END_CONSULTATION]: 'Kết thúc',
   };
-  const consultationStatus = {
-    [CONSULTATION_STATUS.POTENTIAL]: 'Tiềm năng',
-    [CONSULTATION_STATUS.NO_POTENTIAL]: 'Không tiềm năng',
+  const consultationEvaluate = {
+    [CONSULTATION_EVALUATE.POTENTIAL]: 'Tiềm năng',
+    [CONSULTATION_EVALUATE.NO_POTENTIAL]: 'Không tiềm năng',
   };
+  const consultationStatus = {
+    [CONSULTATION_STATUS.NEW]: 'Chưa giao nhiệm vụ',
+    [CONSULTATION_STATUS.WATTING]: 'Chờ xác nhận',
+    [CONSULTATION_STATUS.ACCEPT]: 'Chấp nhận',
+    [CONSULTATION_STATUS.REFUSE]: 'Từ chối'
+  }
   useEffect(() => {
     if (checkRoles(EDU_COUNSELLOR)) {
       getListTask();
@@ -199,6 +211,7 @@ function Task() {
       ...item,
       taskStatus: statusTask[item.status],
       ...item.task,
+      evaluate: consultationEvaluate[item.task.evaluate],
       status: consultationStatus[item.task.status],
     }));
     setData(data.data.data);
@@ -218,12 +231,23 @@ function Task() {
     setTaskID(item.task_id);
   };
   const handleRefuse = async () => {
-    const data = await postRequest(
-      `/api/task/confirm/${taskID}?status=${TASK_STATUS.REFUSE}`,
-      {
-        adviseStatus: ADVISE_STATUS.NEWADVISE,
-      },
-    );
+    let data
+    if(checkRoles(EDU_COUNSELLOR)){
+      data = await postRequest(
+        `/api/task/confirm/${taskID}?status=${TASK_STATUS.REFUSE}`,
+        {
+          adviseStatus: ADVISE_STATUS.NEWADVISE,
+        },
+      );
+    }
+    if(checkRoles(ADMISSION_OFFICER)){
+      data = await postRequest(
+        `/api/task/confirm/consultation/${taskID}?status=${TASK_STATUS.REFUSE}`,
+        {
+          consultationStatus: CONSULTATION_STATUS.REFUSE,
+        },
+      );
+    }
     if (data.status === 1) {
       toast.success(data.message);
       if (checkRoles(EDU_COUNSELLOR)) {
@@ -241,12 +265,23 @@ function Task() {
     }
   };
   const handleAccept = async () => {
-    const data = await postRequest(
-      `/api/task/confirm/${taskID}?status=${TASK_STATUS.ACCEPT}`,
-      {
-        adviseStatus: ADVISE_STATUS.BEING_CONSULTED,
-      },
-    );
+    let data
+    if(checkRoles(EDU_COUNSELLOR)){
+      data = await postRequest(
+        `/api/task/confirm/${taskID}?status=${TASK_STATUS.ACCEPT}`,
+        {
+          adviseStatus: ADVISE_STATUS.BEING_CONSULTED,
+        },
+      );
+    }
+    if(checkRoles(ADMISSION_OFFICER)){
+      data = await postRequest(
+        `/api/task/confirm/consultation/${taskID}?status=${TASK_STATUS.ACCEPT}`,
+        {
+          consultationStatus: CONSULTATION_STATUS.ACCEPT,
+        },
+      );
+    }
     if (data.status === 1) {
       toast.success(data.message);
       if (checkRoles(EDU_COUNSELLOR)) {

@@ -37,7 +37,7 @@ function UpdateConsultation() {
       finance: '',
       schoolarship: '',
       note: '',
-      status: '',
+      evaluate: '',
     },
     onSubmit: async (values) => {
       const data = await postRequest(
@@ -210,7 +210,7 @@ function UpdateConsultation() {
             </div>
             <div className="cols-span-1 flex flex-col">
               <label htmlFor="status" className="mb-3">
-                Status
+                Đánh giá
               </label>
               <TextField
                 select
@@ -219,10 +219,10 @@ function UpdateConsultation() {
                 placeholder="Choose status"
                 size="small"
                 defaultValue=""
-                value={formik.values.status}
+                value={formik.values.evaluate}
                 onChange={(event) => {
                   if (event.target.value !== undefined) {
-                    formik.setFieldValue('status', event.target.value);
+                    formik.setFieldValue('evaluate', event.target.value);
                   }
                 }}
               >

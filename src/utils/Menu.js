@@ -5,7 +5,6 @@ import {
   DashboardOutlined,
   FilePresent,
   InfoOutlined,
-  PaidOutlined,
 } from '@mui/icons-material';
 import { ADMIN, ADMISSION_OFFICER, EDU_COUNSELLOR } from './Constant';
 import {
@@ -25,7 +24,7 @@ export const Menu = [
     key: 'dashboard',
     icon: <DashboardOutlined />,
     isActive: false,
-    role: [ADMIN, EDU_COUNSELLOR, ADMISSION_OFFICER],
+    role: [ADMIN],
   },
   {
     title: 'Nhiệm vụ',
