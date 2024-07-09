@@ -143,7 +143,7 @@ export const Menu = [
     key: 'assign',
     isActive: false,
     icon: <AssignmentLateOutlined />,
-    role: [ADMIN, EDU_COUNSELLOR],
+    role: [ADMIN],
   },
   {
     title: 'Thông tin tư vấn',

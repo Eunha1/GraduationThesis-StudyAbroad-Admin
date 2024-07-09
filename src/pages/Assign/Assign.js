@@ -171,7 +171,7 @@ function Assign() {
   }, []);
   const getListAdvise = async (page = 1) => {
     const data = await getRequest(
-      `/api/task/owner-task?page=${page}&limit=${4}`,
+      `/api/task/owner-task?page=${page}&limit=${10}`,
     );
     data.data.data = data.data.data.map((item) => ({
       ...item,
