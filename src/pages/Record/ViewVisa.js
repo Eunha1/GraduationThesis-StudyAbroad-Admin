@@ -59,8 +59,8 @@ function ViewVisa() {
                   {infomation.customer_phone}
                 </div>
                 <div className="py-1">
-                  <span className="font-medium mr-3">Địa chỉ :</span>
-                  {infomation.customer_address}
+                  <span className="font-medium mr-3">Email :</span>
+                  {infomation.customer_email}
                 </div>
                 <div className="py-1">
                   <span className="font-medium mr-3">Quốc gia có visa :</span>
@@ -68,15 +68,13 @@ function ViewVisa() {
                 </div>
               </div>
               <div className="col-span-1 ml-[20px]">
-                <div className="py-1">
-                  <span className="font-medium mr-3">
-                    Địa chỉ email khách hàng :
-                  </span>
-                  {infomation.customer_email}
-                </div>
-                <div className="py-1">
-                  <span className="font-medium mr-3">Tên nhân viên :</span>
-                  {infomation.Staff_name}
+              <div className="py-1">
+                  <span className="font-medium mr-3">Nhân viên xử lý:</span>
+                  {infomation.staff.map((item,index)=>(
+                    <div key={index} className="ml-6">
+                      {item.email}
+                    </div>
+                  ))}
                 </div>
                 <div className="py-1">
                   <span className="font-medium mr-3">Thời gian cập nhật :</span>
